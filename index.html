@@ -117,7 +117,7 @@
       <h1 class="text-2xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
         Shaswat Cloud Vault
       </h1>
-      <p class="text-xs text-slate-400 mt-1.5 mb-6">Encrypted Client-Side Storage &bull; 4GB Limit &bull; Zero Server Leak</p>
+      <p class="text-xs text-slate-400 mt-1.5 mb-6">Telegram Cloud Synced &bull; Real-time Multi-Device &bull; Zero Server Cost</p>
 
       <!-- Password Form -->
       <form id="unlockForm" onsubmit="handleUnlock(event)" class="space-y-4">
@@ -156,7 +156,7 @@
       <div class="mt-6 pt-5 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500">
         <span class="flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-          IndexedDB Persistent
+          Telegram Bot Engine
         </span>
         <button onclick="fillDefaultPassword()" class="text-indigo-400 hover:text-indigo-300 transition-colors">Default: "Shaswat"</button>
       </div>
@@ -184,9 +184,9 @@
           <div>
             <div class="flex items-center gap-2">
               <h1 class="text-lg font-bold text-white tracking-tight leading-none">Shaswat Cloud Vault</h1>
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PRO 4GB</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">TG LIVE SYNC</span>
             </div>
-            <p class="text-xs text-slate-400 leading-none mt-1">Permanent In-Browser Zero-Server Cloud</p>
+            <p class="text-xs text-slate-400 leading-none mt-1">Multi-Device Cloud &bull; Infinite Capacity</p>
           </div>
         </div>
 
@@ -199,7 +199,7 @@
             <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span>Host Free Forever</span>
+            <span>Bot Configuration</span>
           </button>
 
           <!-- Lock Button -->
@@ -227,15 +227,15 @@
         <div class="lg:col-span-2 glass-panel p-6 rounded-3xl relative overflow-hidden">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
             <div>
-              <span class="text-xs uppercase tracking-wider font-semibold text-indigo-400">Vault Capacity</span>
+              <span class="text-xs uppercase tracking-wider font-semibold text-indigo-400">Vault Metrics</span>
               <div class="flex items-baseline gap-2 mt-0.5">
                 <span id="usedStorageDisplay" class="text-2xl sm:text-3xl font-extrabold text-white">0.00 MB</span>
-                <span class="text-sm text-slate-400">used of <strong class="text-slate-200">4.00 GB Max</strong></span>
+                <span class="text-sm text-slate-400">synced across <strong class="text-slate-200">Telegram Cloud</strong></span>
               </div>
             </div>
             <div class="text-right flex items-center sm:block gap-2">
-              <span id="storagePercentDisplay" class="text-xl sm:text-2xl font-bold font-mono text-cyan-400">0.0%</span>
-              <p class="text-xs text-slate-400">Quota Consumed</p>
+              <span id="storagePercentDisplay" class="text-xl sm:text-2xl font-bold font-mono text-cyan-400">ONLINE</span>
+              <p class="text-xs text-slate-400">Realtime Polling</p>
             </div>
           </div>
 
@@ -243,25 +243,25 @@
           <div class="w-full h-3 bg-vault-950/80 rounded-full overflow-hidden p-0.5 border border-slate-800">
             <div 
               id="storageProgressBar" 
-              class="h-full bg-gradient-to-r from-indigo-500 via-cyan-400 to-pink-500 rounded-full transition-all duration-500" 
-              style="width: 0%"></div>
+              class="h-full bg-gradient-to-r from-indigo-500 via-cyan-400 to-emerald-400 rounded-full transition-all duration-500" 
+              style="width: 100%"></div>
           </div>
 
           <!-- Quick Micro Metrics -->
           <div class="grid grid-cols-3 gap-2 mt-5 pt-4 border-t border-slate-800/60 text-xs">
             <div>
-              <span class="text-slate-400 block">Total Files</span>
+              <span class="text-slate-400 block">Total Items</span>
               <span id="metricFileCount" class="font-bold text-white text-sm">0 items</span>
             </div>
             <div>
-              <span class="text-slate-400 block">Remaining Free</span>
-              <span id="metricRemaining" class="font-bold text-emerald-400 text-sm">4096.00 MB</span>
+              <span class="text-slate-400 block">Cloud Status</span>
+              <span id="metricRemaining" class="font-bold text-emerald-400 text-sm">Active & Synced</span>
             </div>
             <div>
-              <span class="text-slate-400 block">DB Storage Status</span>
+              <span class="text-slate-400 block">Local Cache</span>
               <span class="font-bold text-indigo-400 text-sm flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
-                Active Persisted
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                IndexedDB Persistent
               </span>
             </div>
           </div>
@@ -271,8 +271,8 @@
         <div class="glass-panel p-6 rounded-3xl flex flex-col justify-between">
           <div>
             <span class="text-xs uppercase tracking-wider font-semibold text-slate-400">Quick Actions</span>
-            <h3 class="text-base font-bold text-white mt-1">Batch Management</h3>
-            <p class="text-xs text-slate-400 mt-1">Select multiple media items to batch export or bulk purge safely.</p>
+            <h3 class="text-base font-bold text-white mt-1">Broadcast to Bot</h3>
+            <p class="text-xs text-slate-400 mt-1">Upload a file or push a quick text note directly to your Telegram bot.</p>
           </div>
 
           <div class="space-y-2 mt-4">
@@ -286,9 +286,18 @@
             </button>
 
             <button 
+              onclick="openTextBroadcastModal()"
+              class="w-full py-2 px-4 rounded-xl text-xs font-semibold bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/20 transition-all flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+              <span>Push Text Note to Bot</span>
+            </button>
+
+            <button 
               onclick="purgeAllFiles()"
               class="w-full py-2 px-4 rounded-xl text-xs font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/20 transition-all">
-              Purge All Data (Wipe Clean)
+              Purge Local Vault Cache
             </button>
           </div>
         </div>
@@ -320,25 +329,25 @@
         </div>
 
         <h3 class="text-lg font-bold text-white group-hover:text-indigo-300 transition-colors">
-          Drag & Drop literally anything here
+          Drag & Drop anything to sync with Telegram
         </h3>
         <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-lg mx-auto">
-          Supports Ultra HD Videos, High-res Photos, Audio tracks, PDF documents, Code files, Executables, and Archives up to 4 GB total capacity.
+          Whatever you drop here is uploaded to your Telegram bot. Files uploaded to the bot on your phone will sync here in real time.
         </p>
 
         <!-- Supported Badges -->
         <div class="flex flex-wrap items-center justify-center gap-2 mt-5 text-[11px] text-slate-400">
           <span class="px-2.5 py-1 rounded-lg bg-vault-900 border border-slate-800">MP4 / MKV / WebM</span>
-          <span class="px-2.5 py-1 rounded-lg bg-vault-900 border border-slate-800">JPG / PNG / GIF / WebP</span>
-          <span class="px-2.5 py-1 rounded-lg bg-vault-900 border border-slate-800">MP3 / WAV / FLAC</span>
-          <span class="px-2.5 py-1 rounded-lg bg-vault-900 border border-slate-800">PDF / DOC / Code</span>
-          <span class="px-2.5 py-1 rounded-lg bg-vault-900 border border-slate-800">ZIP / ISO / Any File</span>
+          <span class="px-2.5 py-1 rounded-lg bg-vault-900 border border-slate-800">JPG / PNG / GIF</span>
+          <span class="px-2.5 py-1 rounded-lg bg-vault-900 border border-slate-800">Audio / Voice</span>
+          <span class="px-2.5 py-1 rounded-lg bg-vault-900 border border-slate-800">PDF / Code</span>
+          <span class="px-2.5 py-1 rounded-lg bg-vault-900 border border-slate-800">Raw Text / Notes</span>
         </div>
 
         <!-- Uploading indicator -->
         <div id="uploadProgressContainer" class="hidden mt-6 max-w-md mx-auto">
           <div class="flex items-center justify-between text-xs text-slate-300 mb-1.5 font-mono">
-            <span id="uploadStatusText">Writing to Persistent IndexedDB...</span>
+            <span id="uploadStatusText">Pushing to Telegram Cloud...</span>
             <span id="uploadPercentText">0%</span>
           </div>
           <div class="w-full h-2 bg-vault-900 rounded-full overflow-hidden border border-slate-800">
@@ -354,7 +363,8 @@
         
         <!-- Category Filter Tabs -->
         <div class="flex items-center overflow-x-auto gap-1.5 p-1 rounded-2xl bg-vault-900 border border-slate-800/80 text-xs">
-          <button onclick="setFilterCategory('all')" id="tab-all" class="category-tab px-3.5 py-2 rounded-xl font-medium transition-all bg-indigo-600 text-white shadow-sm">All Files</button>
+          <button onclick="setFilterCategory('all')" id="tab-all" class="category-tab px-3.5 py-2 rounded-xl font-medium transition-all bg-indigo-600 text-white shadow-sm">All</button>
+          <button onclick="setFilterCategory('text')" id="tab-text" class="category-tab px-3.5 py-2 rounded-xl font-medium text-slate-400 hover:text-slate-200 transition-all">Text & Notes</button>
           <button onclick="setFilterCategory('video')" id="tab-video" class="category-tab px-3.5 py-2 rounded-xl font-medium text-slate-400 hover:text-slate-200 transition-all">Videos</button>
           <button onclick="setFilterCategory('image')" id="tab-image" class="category-tab px-3.5 py-2 rounded-xl font-medium text-slate-400 hover:text-slate-200 transition-all">Photos</button>
           <button onclick="setFilterCategory('audio')" id="tab-audio" class="category-tab px-3.5 py-2 rounded-xl font-medium text-slate-400 hover:text-slate-200 transition-all">Audio</button>
@@ -407,7 +417,7 @@
             </svg>
           </div>
           <h4 class="text-base font-semibold text-slate-300">Your Vault is Empty</h4>
-          <p class="text-xs text-slate-500 mt-1 max-w-sm mx-auto">Drop files above or click to upload pictures, movies, audio tracks, or documents without server limits.</p>
+          <p class="text-xs text-slate-500 mt-1 max-w-sm mx-auto">Drop files above or send any message/media to your Telegram Bot on your phone to see it appear here immediately.</p>
           <button 
             onclick="triggerFileInput()"
             class="mt-4 px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-md shadow-indigo-600/30">
@@ -421,9 +431,9 @@
     <!-- Footer -->
     <footer class="mt-auto py-6 border-t border-slate-800/60 text-center text-xs text-slate-500">
       <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <p>&copy; 2026 Shaswat Cloud Vault &bull; Zero Server Footprint &bull; 100% Client-Side Private Storage</p>
+        <p>&copy; 2026 Shaswat Cloud Vault &bull; Telegram Cloud Synced &bull; Persistent IndexedDB Engine</p>
         <div class="flex items-center gap-4 text-slate-400">
-          <button onclick="openDeployGuideModal()" class="hover:text-indigo-400 transition-colors">Free Hosting Instructions</button>
+          <button onclick="openDeployGuideModal()" class="hover:text-indigo-400 transition-colors">Telegram Configuration</button>
           <span>&bull;</span>
           <button onclick="lockVault()" class="hover:text-rose-400 transition-colors">Lock Vault</button>
         </div>
@@ -432,7 +442,7 @@
   </div>
 
   <!-- ======================================================== -->
-  <!-- 3. UNIVERSAL IN-APP ZERO-DOWNLOAD VIEWER MODAL           -->
+  <!-- 3. UNIVERSAL IN-APP MEDIA VIEWER MODAL                   -->
   <!-- ======================================================== -->
   <div id="mediaViewerModal" class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 bg-vault-950/95 backdrop-blur-3xl hidden transition-all duration-300">
     <div class="w-full max-w-6xl max-h-[96vh] flex flex-col glass-panel rounded-3xl border border-white/10 overflow-hidden shadow-2xl relative">
@@ -441,10 +451,10 @@
       <div class="px-5 py-3.5 border-b border-slate-800/80 flex items-center justify-between gap-4 bg-vault-900/80">
         <div class="flex items-center gap-3 overflow-hidden">
           <span id="viewerTypeBadge" class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-            VIDEO
+            MEDIA
           </span>
           <h3 id="viewerFileName" class="text-sm font-semibold text-white truncate max-w-xs sm:max-w-md">
-            filename.mp4
+            item
           </h3>
           <span id="viewerFileSize" class="text-xs text-slate-400 hidden sm:inline-block font-mono">
             (0 MB)
@@ -476,18 +486,65 @@
 
       <!-- Viewer Body / Content Canvas -->
       <div id="viewerContent" class="flex-1 bg-vault-950 flex items-center justify-center overflow-auto p-2 sm:p-4 min-h-[380px] max-h-[75vh] relative">
-        <!-- Content will be injected based on mime type -->
       </div>
 
-      <!-- Viewer Bottom Controls (Specialized per media) -->
+      <!-- Viewer Bottom Controls -->
       <div id="viewerControlsBar" class="px-5 py-3 border-t border-slate-800/80 bg-vault-900/60 flex flex-wrap items-center justify-between gap-3 text-xs">
-        <!-- Dynamic controls injected here (video resolution switcher, zoom slider, etc.) -->
       </div>
     </div>
   </div>
 
   <!-- ======================================================== -->
-  <!-- 4. FREE PERMANENT HOSTING GUIDE MODAL                    -->
+  <!-- 4. TEXT BROADCAST MODAL (WRITE NOTE DIRECTLY TO TG)     -->
+  <!-- ======================================================== -->
+  <div id="textBroadcastModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-vault-950/80 backdrop-blur-xl hidden">
+    <div class="w-full max-w-lg glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 shadow-2xl relative">
+      <button 
+        onclick="closeTextBroadcastModal()" 
+        class="absolute top-5 right-5 text-slate-400 hover:text-white p-1 rounded-lg">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-white">Send Note to Telegram</h3>
+          <p class="text-xs text-slate-400">Pushes instantly to your Telegram chat and stays saved in your vault.</p>
+        </div>
+      </div>
+
+      <textarea 
+        id="broadcastTextInput" 
+        rows="5" 
+        placeholder="Type any message, clipboard link, code snippet, or note here..."
+        class="w-full p-4 rounded-xl bg-vault-900 border border-slate-700 focus:border-cyan-400 text-xs text-white placeholder-slate-500 outline-none transition-all resize-none font-mono"></textarea>
+
+      <div class="mt-4 flex justify-end gap-2">
+        <button 
+          onclick="closeTextBroadcastModal()" 
+          class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-all">
+          Cancel
+        </button>
+        <button 
+          onclick="sendTextNoteToTelegram()" 
+          class="px-5 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-600 hover:to-indigo-700 text-white shadow-lg shadow-indigo-600/30 transition-all flex items-center gap-1.5">
+          <span>Send to Telegram Bot</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 5. TELEGRAM BOT SETTINGS MODAL                           -->
   <!-- ======================================================== -->
   <div id="deployGuideModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-vault-950/80 backdrop-blur-xl hidden">
     <div class="w-full max-w-2xl glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 shadow-2xl relative max-h-[90vh] overflow-y-auto">
@@ -502,47 +559,48 @@
       <div class="flex items-center gap-3 mb-4">
         <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
         <div>
-          <h3 class="text-lg font-bold text-white">How to Host This Site Free Forever</h3>
-          <p class="text-xs text-slate-400">Zero backend fees, infinite runtime, private to your devices.</p>
+          <h3 class="text-lg font-bold text-white">Telegram Bot Realtime Config</h3>
+          <p class="text-xs text-slate-400">Configure your personal Telegram Bot Token and Chat ID.</p>
         </div>
       </div>
 
       <div class="space-y-4 text-xs text-slate-300">
-        <div class="p-4 rounded-2xl bg-vault-900 border border-slate-800">
-          <h4 class="font-bold text-cyan-300 text-sm mb-1">Option 1: GitHub Pages (100% Free Forever)</h4>
-          <ol class="list-decimal list-inside space-y-1 text-slate-400">
-            <li>Create a free account on <strong class="text-white">GitHub.com</strong>.</li>
-            <li>Create a new public or private repository (e.g. <code class="text-indigo-300">my-vault</code>).</li>
-            <li>Upload this single <code class="text-indigo-300">index.html</code> file directly.</li>
-            <li>Go to <strong class="text-white">Settings &rarr; Pages</strong> &rarr; Select <code class="text-white">main branch</code> &rarr; Click <strong class="text-white">Save</strong>.</li>
-            <li>Your public vault URL is live instantly at <code class="text-cyan-400">https://yourusername.github.io/my-vault</code>!</li>
-          </ol>
+        <div class="p-4 rounded-2xl bg-vault-900 border border-slate-800 space-y-3">
+          <div>
+            <label class="block text-slate-400 font-semibold mb-1">Telegram Bot Token (from @BotFather):</label>
+            <input 
+              type="text" 
+              id="cfgBotToken" 
+              placeholder="e.g. 7123456789:AAFxxx..." 
+              class="w-full px-3 py-2 rounded-xl bg-vault-850 border border-slate-700 text-xs text-white font-mono outline-none"
+            />
+          </div>
+          <div>
+            <label class="block text-slate-400 font-semibold mb-1">Your Chat ID or Channel ID:</label>
+            <input 
+              type="text" 
+              id="cfgChatId" 
+              placeholder="e.g. 123456789" 
+              class="w-full px-3 py-2 rounded-xl bg-vault-850 border border-slate-700 text-xs text-white font-mono outline-none"
+            />
+          </div>
+          <button 
+            onclick="saveTelegramConfig()" 
+            class="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition-all">
+            Save & Connect Bot
+          </button>
         </div>
 
-        <div class="p-4 rounded-2xl bg-vault-900 border border-slate-800">
-          <h4 class="font-bold text-violet-300 text-sm mb-1">Option 2: Vercel or Netlify (Drag & Drop in 5 Seconds)</h4>
-          <ol class="list-decimal list-inside space-y-1 text-slate-400">
-            <li>Visit <strong class="text-white">app.netlify.com/drop</strong> or <strong class="text-white">vercel.com</strong>.</li>
-            <li>Drag & drop a folder containing this <code class="text-violet-300">index.html</code> file.</li>
-            <li>You get an instant high-speed HTTPS link with free CDN forever.</li>
-          </ol>
+        <div class="p-4 rounded-2xl bg-vault-900 border border-slate-800 space-y-1.5 text-slate-400">
+          <h4 class="font-bold text-cyan-300 text-sm mb-1">How to obtain these in 60 seconds:</h4>
+          <p>1. Open Telegram & search for <strong class="text-white">@BotFather</strong>.</p>
+          <p>2. Send <code class="text-indigo-300">/newbot</code>, choose a name and username, then copy the HTTP API Token.</p>
+          <p>3. Send any message to your new bot, then open <code class="text-cyan-400">https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates</code> in your browser to copy your <code class="text-indigo-300">"id"</code>.</p>
         </div>
-
-        <div class="p-4 rounded-2xl bg-vault-900/60 border border-slate-800 text-[11px] text-slate-400">
-          <strong class="text-slate-200">How files persist:</strong> All uploaded files are stored safely inside your browser's persistent <strong class="text-indigo-300">IndexedDB Engine</strong>. They do not expire when closing tabs. They survive browser restarts and stay offline-ready without paying for AWS or server hosting!
-        </div>
-      </div>
-
-      <div class="mt-6 flex justify-end">
-        <button 
-          onclick="closeDeployGuideModal()" 
-          class="px-5 py-2.5 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition-all">
-          Got It, Thanks!
-        </button>
       </div>
     </div>
   </div>
@@ -551,14 +609,17 @@
   <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
   <!-- ======================================================== -->
-  <!-- 5. CORE JAVASCRIPT LOGIC ENGINE                          -->
+  <!-- 6. CORE JAVASCRIPT LOGIC ENGINE                          -->
   <!-- ======================================================== -->
   <script>
-    /* Configuration & State */
+    /* MASTER PASSCODE & DB DEFINITIONS */
     const MASTER_PASS = "Shaswat";
-    const MAX_CAPACITY_BYTES = 4 * 1024 * 1024 * 1024; // 4.00 GB
-    const DB_NAME = "ShaswatVaultDB_v1";
-    const DB_STORE = "user_vault_files";
+    const DB_NAME = "ShaswatVault_TG_v2";
+    const DB_STORE = "synced_files";
+
+    /* DEFAULT TELEGRAM CREDENTIALS (Can also be set via UI Modal) */
+    let TELEGRAM_BOT_TOKEN = localStorage.getItem("shaswat_tg_bot_token") || "YOUR_BOT_TOKEN_HERE";
+    let AUTHORIZED_CHAT_ID = localStorage.getItem("shaswat_tg_chat_id") || "YOUR_CHAT_ID_HERE";
 
     let dbInstance = null;
     let vaultFiles = [];
@@ -567,44 +628,46 @@
     let currentSort = 'date-desc';
     let currentActiveViewerFile = null;
 
-    // Image viewer transformation state
+    let isPolling = false;
+    let lastUpdateId = parseInt(localStorage.getItem("shaswat_last_update_id") || "0");
+
     let imgZoomLevel = 1;
     let imgRotation = 0;
 
-    /* IndexedDB Management */
+    /* ======================================================== */
+    /* 1. INDEXEDDB PERSISTENCE ENGINE                          */
+    /* ======================================================== */
     function initDatabase() {
       return new Promise((resolve, reject) => {
-        const request = indexedDB.open(DB_NAME, 1);
-        request.onupgradeneeded = (e) => {
+        const req = indexedDB.open(DB_NAME, 1);
+        req.onupgradeneeded = (e) => {
           const db = e.target.result;
           if (!db.objectStoreNames.contains(DB_STORE)) {
             const store = db.createObjectStore(DB_STORE, { keyPath: "id" });
             store.createIndex("timestamp", "timestamp", { unique: false });
             store.createIndex("category", "category", { unique: false });
+            store.createIndex("message_id", "message_id", { unique: false });
           }
         };
-        request.onsuccess = (e) => {
+        req.onsuccess = (e) => {
           dbInstance = e.target.result;
           resolve(dbInstance);
         };
-        request.onerror = (e) => {
-          console.error("IndexedDB initialization error:", e);
-          reject(e);
-        };
+        req.onerror = (e) => reject(e);
       });
     }
 
-    async function saveFileToDB(fileRecord) {
+    async function saveItemToDB(item) {
       return new Promise((resolve, reject) => {
         const tx = dbInstance.transaction([DB_STORE], "readwrite");
         const store = tx.objectStore(DB_STORE);
-        const req = store.put(fileRecord);
+        const req = store.put(item);
         req.onsuccess = () => resolve(true);
         req.onerror = (e) => reject(e);
       });
     }
 
-    async function getAllFilesFromDB() {
+    async function getAllItemsFromDB() {
       return new Promise((resolve, reject) => {
         const tx = dbInstance.transaction([DB_STORE], "readonly");
         const store = tx.objectStore(DB_STORE);
@@ -614,7 +677,7 @@
       });
     }
 
-    async function deleteFileFromDB(id) {
+    async function deleteItemFromDB(id) {
       return new Promise((resolve, reject) => {
         const tx = dbInstance.transaction([DB_STORE], "readwrite");
         const store = tx.objectStore(DB_STORE);
@@ -624,7 +687,7 @@
       });
     }
 
-    async function clearAllDBFiles() {
+    async function clearAllDBItems() {
       return new Promise((resolve, reject) => {
         const tx = dbInstance.transaction([DB_STORE], "readwrite");
         const store = tx.objectStore(DB_STORE);
@@ -634,100 +697,170 @@
       });
     }
 
-    /* Unlock & Security Logic */
-    function handleUnlock(e) {
-      e.preventDefault();
-      const input = document.getElementById("passwordInput");
-      const err = document.getElementById("lockError");
-      const card = document.getElementById("lockCard");
+    /* ======================================================== */
+    /* 2. REAL-TIME TELEGRAM POLLING & SYNC ENGINE              */
+    /* ======================================================== */
+    async function startTelegramLiveSync() {
+      if (isPolling) return;
+      if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN.includes("YOUR_BOT_TOKEN")) {
+        console.warn("Telegram bot token not set. Open configuration to set it.");
+        return;
+      }
+      isPolling = true;
 
-      if (input.value === MASTER_PASS) {
-        err.classList.add("hidden");
-        unlockVaultInterface();
-        sessionStorage.setItem("shaswat_vault_unlocked", "true");
-        input.value = "";
-      } else {
-        err.classList.remove("hidden");
-        card.classList.remove("animate-shake");
-        void card.offsetWidth; // retrigger shake
-        card.classList.add("animate-shake");
-        input.focus();
-        showToast("Access Denied: Invalid Passcode", "rose");
+      // Start long-poll loop
+      while (isPolling) {
+        try {
+          await pollTelegramUpdates();
+        } catch (err) {
+          // Pause 3 seconds on network error before next poll
+          await new Promise(r => setTimeout(r, 3000));
+        }
       }
     }
 
-    function unlockVaultInterface() {
-      const lockScreen = document.getElementById("lockScreen");
-      const app = document.getElementById("vaultApp");
-      
-      lockScreen.classList.add("opacity-0", "pointer-events-none");
-      setTimeout(() => {
-        lockScreen.classList.add("hidden");
-        app.classList.remove("opacity-0", "pointer-events-none");
-      }, 300);
+    async function pollTelegramUpdates() {
+      const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates?offset=${lastUpdateId + 1}&timeout=20&allowed_updates=["message","channel_post"]`;
+      const res = await fetch(url);
+      if (!res.ok) return;
 
-      refreshVaultData();
-    }
+      const data = await res.json();
+      if (!data.ok || !data.result || data.result.length === 0) return;
 
-    function lockVault() {
-      sessionStorage.removeItem("shaswat_vault_unlocked");
-      closeMediaViewer();
-      const lockScreen = document.getElementById("lockScreen");
-      const app = document.getElementById("vaultApp");
+      let hasChanges = false;
 
-      app.classList.add("opacity-0", "pointer-events-none");
-      lockScreen.classList.remove("hidden");
-      setTimeout(() => {
-        lockScreen.classList.remove("opacity-0", "pointer-events-none");
-        document.getElementById("passwordInput").focus();
-      }, 50);
-      showToast("Vault locked securely", "indigo");
-    }
+      for (const update of data.result) {
+        lastUpdateId = Math.max(lastUpdateId, update.update_id);
+        localStorage.setItem("shaswat_last_update_id", lastUpdateId.toString());
 
-    function togglePasswordVisibility() {
-      const p = document.getElementById("passwordInput");
-      p.type = p.type === "password" ? "text" : "password";
-    }
+        const msg = update.message || update.channel_post;
+        if (!msg) continue;
 
-    function fillDefaultPassword() {
-      const p = document.getElementById("passwordInput");
-      p.value = MASTER_PASS;
-      p.focus();
-    }
+        // Verify Authorized Sender/Chat
+        if (AUTHORIZED_CHAT_ID && !AUTHORIZED_CHAT_ID.includes("YOUR_CHAT_ID")) {
+          if (String(msg.chat.id) !== String(AUTHORIZED_CHAT_ID)) {
+            continue;
+          }
+        }
 
-    /* File Ingestion & Drag and Drop */
-    function triggerFileInput() {
-      document.getElementById("filePicker").click();
-    }
+        const parsed = parseTelegramMessage(msg);
+        if (parsed) {
+          // Check if item already exists in local DB
+          const existing = vaultFiles.find(f => f.id === parsed.id);
+          if (!existing) {
+            await saveItemToDB(parsed);
+            hasChanges = true;
+            showToast(`Received from Telegram: ${parsed.name}`, "emerald");
+          }
+        }
+      }
 
-    function handleDragOver(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      document.getElementById("dropZone").classList.add("border-indigo-500", "bg-indigo-500/10");
-    }
-
-    function handleDragLeave(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      document.getElementById("dropZone").classList.remove("border-indigo-500", "bg-indigo-500/10");
-    }
-
-    function handleDrop(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      document.getElementById("dropZone").classList.remove("border-indigo-500", "bg-indigo-500/10");
-      if (e.dataTransfer && e.dataTransfer.files) {
-        processUploadedFiles(Array.from(e.dataTransfer.files));
+      if (hasChanges) {
+        await refreshVaultData();
       }
     }
 
-    function handleFilesSelected(e) {
-      if (e.target.files) {
-        processUploadedFiles(Array.from(e.target.files));
-        e.target.value = ""; // reset for re-selection
+    function parseTelegramMessage(msg) {
+      const messageId = msg.message_id;
+      const timestamp = (msg.date || Math.floor(Date.now() / 1000)) * 1000;
+
+      // 1. TEXT MESSAGE / NOTES
+      if (msg.text) {
+        const preview = msg.text.slice(0, 32);
+        return {
+          id: `tg_msg_${messageId}`,
+          message_id: messageId,
+          name: preview + (msg.text.length > 32 ? "..." : ""),
+          size: new Blob([msg.text]).size,
+          type: "text/plain",
+          category: "text",
+          timestamp: timestamp,
+          text_content: msg.text,
+          file_id: null,
+          blob: new Blob([msg.text], { type: "text/plain" })
+        };
       }
+
+      // 2. MEDIA & DOCUMENTS
+      let fileObj = null;
+      let fileName = "";
+      let mimeType = "";
+      let category = "other";
+
+      if (msg.document) {
+        fileObj = msg.document;
+        fileName = fileObj.file_name || `document_${messageId}`;
+        mimeType = fileObj.mime_type || "application/octet-stream";
+        category = detectFileCategory(mimeType, fileName);
+      } else if (msg.video) {
+        fileObj = msg.video;
+        fileName = fileObj.file_name || `video_${messageId}.mp4`;
+        mimeType = fileObj.mime_type || "video/mp4";
+        category = "video";
+      } else if (msg.photo && msg.photo.length > 0) {
+        fileObj = msg.photo[msg.photo.length - 1]; // highest resolution
+        fileName = `photo_${messageId}.jpg`;
+        mimeType = "image/jpeg";
+        category = "image";
+      } else if (msg.audio) {
+        fileObj = msg.audio;
+        fileName = fileObj.file_name || `audio_${messageId}.mp3`;
+        mimeType = fileObj.mime_type || "audio/mpeg";
+        category = "audio";
+      } else if (msg.voice) {
+        fileObj = msg.voice;
+        fileName = `voice_note_${messageId}.ogg`;
+        mimeType = "audio/ogg";
+        category = "audio";
+      }
+
+      if (!fileObj) return null;
+
+      return {
+        id: `tg_file_${messageId}_${fileObj.file_id.slice(0, 8)}`,
+        message_id: messageId,
+        file_id: fileObj.file_id,
+        name: fileName,
+        size: fileObj.file_size || 0,
+        type: mimeType,
+        category: category,
+        timestamp: timestamp,
+        text_content: null,
+        blob: null // fetched on demand
+      };
     }
 
+    /* Resolves direct stream/download URL from Telegram Bot API */
+    async function resolveTelegramDirectUrl(item) {
+      if (item.cachedUrl) return item.cachedUrl;
+
+      // If text item, create blob URL directly
+      if (item.category === "text" && item.text_content) {
+        item.cachedUrl = URL.createObjectURL(new Blob([item.text_content], { type: "text/plain" }));
+        return item.cachedUrl;
+      }
+
+      // If we have an in-memory blob stored in IndexedDB
+      if (item.blob) {
+        item.cachedUrl = URL.createObjectURL(item.blob);
+        return item.cachedUrl;
+      }
+
+      // Otherwise resolve from Telegram getFile API
+      const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getFile?file_id=${item.file_id}`);
+      const data = await res.json();
+
+      if (!data.ok || !data.result?.file_path) {
+        throw new Error(data.description || "Unable to resolve Telegram file path.");
+      }
+
+      item.cachedUrl = `https://api.telegram.org/file/bot${TELEGRAM_BOT_TOKEN}/${data.result.file_path}`;
+      return item.cachedUrl;
+    }
+
+    /* ======================================================== */
+    /* 3. UPLOADS: WEBSITE TO TELEGRAM BOT                      */
+    /* ======================================================== */
     async function processUploadedFiles(filesList) {
       if (!filesList || filesList.length === 0) return;
 
@@ -738,110 +871,168 @@
 
       progressContainer.classList.remove("hidden");
 
-      let currentTotalBytes = vaultFiles.reduce((acc, curr) => acc + curr.size, 0);
-
       for (let i = 0; i < filesList.length; i++) {
         const file = filesList[i];
-        
-        // Check capacity limit
-        if (currentTotalBytes + file.size > MAX_CAPACITY_BYTES) {
-          showToast(`Storage limit reached! Cannot add "${file.name}" (4GB exceeded).`, "rose");
-          continue;
-        }
-
         const percent = Math.round(((i + 1) / filesList.length) * 100);
         progressBar.style.width = percent + "%";
         progressText.innerText = percent + "%";
-        statusText.innerText = `Ingesting ${file.name} (${formatBytes(file.size)})...`;
-
-        const category = detectFileCategory(file.type, file.name);
-
-        const newRecord = {
-          id: "vault_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9),
-          name: file.name,
-          size: file.size,
-          type: file.type || "application/octet-stream",
-          category: category,
-          timestamp: Date.now(),
-          blob: file // Store File/Blob directly into IndexedDB
-        };
+        statusText.innerText = `Pushing ${file.name} to Telegram Bot...`;
 
         try {
-          await saveFileToDB(newRecord);
-          currentTotalBytes += file.size;
+          const formData = new FormData();
+          formData.append("chat_id", AUTHORIZED_CHAT_ID);
+          formData.append("document", file, file.name);
+
+          // Upload to Telegram
+          const uploadRes = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument`, {
+            method: "POST",
+            body: formData
+          });
+
+          const result = await uploadRes.json();
+          let messageId = Date.now();
+
+          if (result.ok && result.result) {
+            messageId = result.result.message_id;
+          }
+
+          // Save locally in IndexedDB so it stays permanently on the site
+          const category = detectFileCategory(file.type, file.name);
+          const newRecord = {
+            id: `tg_file_${messageId}_${Math.random().toString(36).substr(2, 6)}`,
+            message_id: messageId,
+            name: file.name,
+            size: file.size,
+            type: file.type || "application/octet-stream",
+            category: category,
+            timestamp: Date.now(),
+            text_content: null,
+            blob: file
+          };
+
+          await saveItemToDB(newRecord);
         } catch (err) {
-          console.error("Storage error:", err);
-          showToast("Failed to write file into IndexedDB: " + err.message, "rose");
+          showToast(`Failed uploading ${file.name}: ${err.message}`, "rose");
         }
       }
 
       setTimeout(() => {
         progressContainer.classList.add("hidden");
         progressBar.style.width = "0%";
-      }, 600);
+      }, 500);
 
-      showToast(`Processed ${filesList.length} item(s) safely into vault!`, "emerald");
+      showToast("Uploaded to Telegram Bot & Saved in Vault!", "emerald");
       await refreshVaultData();
     }
 
-    function detectFileCategory(mime, filename) {
-      const ext = filename.split('.').pop().toLowerCase();
-      if (mime.startsWith("image/") || ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'bmp', 'ico'].includes(ext)) {
-        return "image";
+    /* PUSH TEXT NOTE TO TELEGRAM BOT */
+    async function sendTextNoteToTelegram() {
+      const input = document.getElementById("broadcastTextInput");
+      const text = input.value.trim();
+      if (!text) return;
+
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: AUTHORIZED_CHAT_ID,
+            text: text
+          })
+        });
+
+        const data = await res.json();
+        const messageId = data.ok ? data.result.message_id : Date.now();
+
+        const newRecord = {
+          id: `tg_msg_${messageId}`,
+          message_id: messageId,
+          name: text.slice(0, 32) + (text.length > 32 ? "..." : ""),
+          size: new Blob([text]).size,
+          type: "text/plain",
+          category: "text",
+          timestamp: Date.now(),
+          text_content: text,
+          blob: new Blob([text], { type: "text/plain" })
+        };
+
+        await saveItemToDB(newRecord);
+        closeTextBroadcastModal();
+        input.value = "";
+        showToast("Note sent to Telegram Bot!", "emerald");
+        await refreshVaultData();
+      } catch (err) {
+        showToast("Error sending note: " + err.message, "rose");
       }
-      if (mime.startsWith("video/") || ['mp4', 'webm', 'ogg', 'mov', 'mkv', 'avi', 'flv'].includes(ext)) {
-        return "video";
-      }
-      if (mime.startsWith("audio/") || ['mp3', 'wav', 'ogg', 'm4a', 'aac', 'flac'].includes(ext)) {
-        return "audio";
-      }
-      if (mime === "application/pdf" || ext === "pdf") {
-        return "pdf";
-      }
-      return "other";
     }
 
-    /* Refresh UI & Calculations */
+    /* ======================================================== */
+    /* 4. SYNCED DELETE (REMOVES LOCALLY + FROM TELEGRAM BOT)    */
+    /* ======================================================== */
+    async function requestDeleteItem(itemId) {
+      const item = vaultFiles.find(f => f.id === itemId);
+      if (!item) return;
+
+      try {
+        // 1. Delete on Telegram chat if message_id exists
+        if (item.message_id && TELEGRAM_BOT_TOKEN && AUTHORIZED_CHAT_ID) {
+          fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/deleteMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              chat_id: AUTHORIZED_CHAT_ID,
+              message_id: item.message_id
+            })
+          }).catch(() => {});
+        }
+
+        // 2. Delete from local database
+        await deleteItemFromDB(itemId);
+        showToast("Removed from Vault and Telegram", "indigo");
+        await refreshVaultData();
+      } catch (err) {
+        showToast("Delete failed: " + err.message, "rose");
+      }
+    }
+
+    async function purgeAllFiles() {
+      if (window.confirm("Purge local browser vault cache? (Files remain on your Telegram account)")) {
+        try {
+          await clearAllDBItems();
+          showToast("Local vault cache wiped clean", "rose");
+          await refreshVaultData();
+        } catch (err) {
+          showToast("Purge failed: " + err.message, "rose");
+        }
+      }
+    }
+
+    /* ======================================================== */
+    /* 5. UI REFRESH, FILTERS & CARD RENDERING                  */
+    /* ======================================================== */
     async function refreshVaultData() {
-      vaultFiles = await getAllFilesFromDB();
+      vaultFiles = await getAllItemsFromDB();
       updateStorageMetrics();
       renderFilesList();
     }
 
     function updateStorageMetrics() {
-      const usedBytes = vaultFiles.reduce((acc, curr) => acc + curr.size, 0);
-      const remainingBytes = Math.max(0, MAX_CAPACITY_BYTES - usedBytes);
-      const usedPercentage = ((usedBytes / MAX_CAPACITY_BYTES) * 100).toFixed(1);
-
-      document.getElementById("usedStorageDisplay").innerText = formatBytes(usedBytes);
-      document.getElementById("storagePercentDisplay").innerText = `${usedPercentage}%`;
-      document.getElementById("storageProgressBar").style.width = `${Math.min(100, usedPercentage)}%`;
+      const totalBytes = vaultFiles.reduce((acc, curr) => acc + (curr.size || 0), 0);
+      document.getElementById("usedStorageDisplay").innerText = formatBytes(totalBytes);
       document.getElementById("metricFileCount").innerText = `${vaultFiles.length} item${vaultFiles.length === 1 ? '' : 's'}`;
-      document.getElementById("metricRemaining").innerText = formatBytes(remainingBytes);
-
-      // Warning color if approaching 4GB
-      const bar = document.getElementById("storageProgressBar");
-      if (usedPercentage > 90) {
-        bar.className = "h-full bg-rose-500 rounded-full transition-all duration-500";
-      } else if (usedPercentage > 75) {
-        bar.className = "h-full bg-amber-400 rounded-full transition-all duration-500";
-      } else {
-        bar.className = "h-full bg-gradient-to-r from-indigo-500 via-cyan-400 to-pink-500 rounded-full transition-all duration-500";
-      }
     }
 
     function renderFilesList() {
       const grid = document.getElementById("filesGrid");
       const empty = document.getElementById("emptyState");
 
-      // Filter
       let filtered = vaultFiles.filter(item => {
         const matchesCategory = currentFilter === 'all' || item.category === currentFilter;
-        const matchesSearch = item.name.toLowerCase().includes(currentSearch.toLowerCase());
+        const matchesSearch = item.name.toLowerCase().includes(currentSearch.toLowerCase()) || 
+                              (item.text_content && item.text_content.toLowerCase().includes(currentSearch.toLowerCase()));
         return matchesCategory && matchesSearch;
       });
 
-      // Sort
       filtered.sort((a, b) => {
         if (currentSort === 'date-desc') return b.timestamp - a.timestamp;
         if (currentSort === 'date-asc') return a.timestamp - b.timestamp;
@@ -870,29 +1061,28 @@
         year: 'numeric'
       });
 
+      const isText = file.category === "text";
+
       return `
         <div class="glass-card rounded-2xl p-4 flex flex-col justify-between group relative">
-          <!-- Card Thumbnail or Category Badge Header -->
           <div class="flex items-start justify-between gap-2 mb-3">
             <div class="p-2.5 rounded-xl bg-vault-900 border border-slate-700/60 text-indigo-400 group-hover:text-cyan-300 transition-colors">
               ${icon}
             </div>
             
             <div class="flex items-center gap-1">
-              <!-- Direct Download Action -->
               <button 
                 onclick="event.stopPropagation(); triggerDirectDownload('${file.id}')" 
-                title="Download to Device"
+                title="Download or Save"
                 class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                 </svg>
               </button>
 
-              <!-- Delete Action -->
               <button 
-                onclick="event.stopPropagation(); requestDeleteFile('${file.id}')" 
-                title="Delete File"
+                onclick="event.stopPropagation(); requestDeleteItem('${file.id}')" 
+                title="Delete from Vault & Telegram"
                 class="p-2 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition-all">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -901,19 +1091,17 @@
             </div>
           </div>
 
-          <!-- File Info -->
           <div class="cursor-pointer" onclick="openMediaViewer('${file.id}')">
             <h4 class="text-sm font-semibold text-white group-hover:text-indigo-300 transition-colors truncate" title="${escapeHtml(file.name)}">
               ${escapeHtml(file.name)}
             </h4>
             
             <div class="flex items-center justify-between text-xs text-slate-400 mt-2 font-mono">
-              <span>${formattedSize}</span>
+              <span>${isText ? 'Text Note' : formattedSize}</span>
               <span>${dateStr}</span>
             </div>
           </div>
 
-          <!-- In-App View Pill Trigger -->
           <button 
             onclick="openMediaViewer('${file.id}')"
             class="mt-4 w-full py-2 px-3 rounded-xl bg-vault-900 hover:bg-indigo-600/20 hover:border-indigo-500/40 border border-slate-800 text-[11px] font-semibold text-slate-300 hover:text-indigo-200 transition-all flex items-center justify-center gap-1.5">
@@ -921,370 +1109,190 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
             </svg>
-            <span>Inspect & Play</span>
+            <span>${isText ? 'Read Note' : 'Inspect & Stream'}</span>
           </button>
         </div>
       `;
     }
 
     /* ======================================================== */
-    /* ZERO-DOWNLOAD FULLSCREEN MEDIA VIEWER ENGINE             */
+    /* 6. UNIVERSAL IN-APP MEDIA VIEWER                         */
     /* ======================================================== */
-    async function openMediaViewer(fileId) {
-      const file = vaultFiles.find(f => f.id === fileId);
-      if (!file) return;
+    async function openMediaViewer(itemId) {
+      const item = vaultFiles.find(f => f.id === itemId);
+      if (!item) return;
 
-      currentActiveViewerFile = file;
+      currentActiveViewerFile = item;
 
-      // Update Modal Header
-      document.getElementById("viewerFileName").innerText = file.name;
-      document.getElementById("viewerFileSize").innerText = `(${formatBytes(file.size)})`;
-      document.getElementById("viewerTypeBadge").innerText = file.category.toUpperCase();
-
-      const downloadBtn = document.getElementById("viewerDownloadBtn");
-      downloadBtn.onclick = () => triggerDirectDownload(file.id);
+      document.getElementById("viewerFileName").innerText = item.name;
+      document.getElementById("viewerFileSize").innerText = `(${formatBytes(item.size)})`;
+      document.getElementById("viewerTypeBadge").innerText = item.category.toUpperCase();
 
       const content = document.getElementById("viewerContent");
       const controls = document.getElementById("viewerControlsBar");
-      content.innerHTML = "";
+      content.innerHTML = `<div class="text-xs text-cyan-400 animate-pulse font-mono">Loading from Telegram Cloud...</div>`;
       controls.innerHTML = "";
 
-      const fileURL = URL.createObjectURL(file.blob);
+      document.getElementById("mediaViewerModal").classList.remove("hidden");
 
-      // 1. VIDEO VIEWER (With Live Resolution Scaling, Speed, PiP)
-      if (file.category === "video") {
+      let fileURL = "";
+      try {
+        fileURL = await resolveTelegramDirectUrl(item);
+      } catch (err) {
         content.innerHTML = `
-          <div class="relative w-full h-full flex flex-col items-center justify-center">
-            <video 
-              id="activeVideoPlayer" 
-              src="${fileURL}" 
-              controls 
-              autoplay 
-              playsinline 
-              class="max-w-full max-h-[65vh] rounded-2xl shadow-2xl transition-all duration-300">
-            </video>
+          <div class="text-center p-6 max-w-md">
+            <div class="text-rose-400 text-sm font-semibold mb-2">Notice</div>
+            <p class="text-xs text-slate-400 mb-4">${escapeHtml(err.message)}</p>
+            <button onclick="requestDeleteItem('${item.id}')" class="px-4 py-2 rounded-xl bg-rose-600 text-white text-xs font-semibold">Delete Record</button>
           </div>
         `;
+        return;
+      }
 
+      const downloadBtn = document.getElementById("viewerDownloadBtn");
+      downloadBtn.onclick = () => triggerDirectDownload(item.id);
+
+      // 1. TEXT NOTES
+      if (item.category === "text") {
+        content.innerHTML = `
+          <div class="w-full h-[65vh] p-6 rounded-2xl bg-vault-900 border border-slate-800 overflow-auto font-mono text-xs text-slate-200 leading-relaxed whitespace-pre-wrap select-text">
+            ${escapeHtml(item.text_content || '')}
+          </div>
+        `;
+        controls.innerHTML = `
+          <span class="text-slate-400">Telegram Text Message</span>
+          <button onclick="navigator.clipboard.writeText('${escapeHtml(item.text_content || '')}'); showToast('Copied to clipboard!', 'cyan')" class="px-3 py-1.5 rounded-xl bg-vault-850 hover:bg-vault-800 text-cyan-400 border border-slate-700">Copy Text</button>
+        `;
+      }
+      // 2. VIDEO
+      else if (item.category === "video") {
+        content.innerHTML = `
+          <video id="activeVideoPlayer" src="${fileURL}" controls autoplay playsinline class="max-w-full max-h-[65vh] rounded-2xl shadow-2xl"></video>
+        `;
         controls.innerHTML = `
           <div class="flex items-center gap-2">
-            <span class="text-slate-400">Resolution:</span>
-            <select id="videoResSelect" onchange="changeVideoResolution(this.value)" class="px-2.5 py-1 rounded-lg bg-vault-850 border border-slate-700 text-xs text-white outline-none">
-              <option value="original">Original (Full Quality)</option>
-              <option value="1080p">1080p Full HD</option>
-              <option value="720p">720p HD</option>
-              <option value="480p">480p SD</option>
-              <option value="360p">360p Data Saver</option>
-            </select>
-          </div>
-
-          <div class="flex items-center gap-2">
-            <span class="text-slate-400">Playback Speed:</span>
+            <span class="text-slate-400">Speed:</span>
             <select onchange="changeVideoSpeed(this.value)" class="px-2.5 py-1 rounded-lg bg-vault-850 border border-slate-700 text-xs text-white outline-none">
               <option value="0.5">0.5x</option>
-              <option value="1.0" selected>1.0x Normal</option>
-              <option value="1.25">1.25x</option>
+              <option value="1.0" selected>1.0x</option>
               <option value="1.5">1.5x</option>
-              <option value="2.0">2.0x Double</option>
+              <option value="2.0">2.0x</option>
             </select>
           </div>
-
-          <div class="flex items-center gap-2">
-            <button onclick="toggleVideoPiP()" class="px-2.5 py-1 rounded-lg bg-vault-850 hover:bg-vault-800 text-slate-300 border border-slate-700">PiP Mode</button>
-            <button onclick="toggleVideoFullScreen()" class="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white">Fullscreen</button>
-          </div>
+          <button onclick="toggleVideoFullScreen()" class="px-3 py-1 rounded-lg bg-indigo-600 text-white">Fullscreen</button>
         `;
-      } 
-      // 2. IMAGE VIEWER (Pan, Zoom, Rotate)
-      else if (file.category === "image") {
+      }
+      // 3. IMAGE
+      else if (item.category === "image") {
         imgZoomLevel = 1;
         imgRotation = 0;
         content.innerHTML = `
-          <div class="relative overflow-hidden w-full h-full flex items-center justify-center p-4">
-            <img 
-              id="activeImageViewer" 
-              src="${fileURL}" 
-              alt="${escapeHtml(file.name)}" 
-              class="max-w-full max-h-[65vh] object-contain rounded-xl transition-transform duration-200 shadow-2xl" 
-            />
-          </div>
+          <img id="activeImageViewer" src="${fileURL}" alt="${escapeHtml(item.name)}" class="max-w-full max-h-[65vh] object-contain rounded-xl transition-transform duration-200" />
         `;
-
         controls.innerHTML = `
           <div class="flex items-center gap-3">
-            <span class="text-slate-400">Zoom:</span>
-            <button onclick="adjustImageZoom(-0.25)" class="w-7 h-7 rounded-lg bg-vault-850 hover:bg-vault-800 border border-slate-700 font-bold">-</button>
+            <button onclick="adjustImageZoom(-0.25)" class="w-7 h-7 rounded-lg bg-vault-850 border border-slate-700 font-bold">-</button>
             <span id="zoomDisplay" class="font-mono text-cyan-400">100%</span>
-            <button onclick="adjustImageZoom(0.25)" class="w-7 h-7 rounded-lg bg-vault-850 hover:bg-vault-800 border border-slate-700 font-bold">+</button>
+            <button onclick="adjustImageZoom(0.25)" class="w-7 h-7 rounded-lg bg-vault-850 border border-slate-700 font-bold">+</button>
           </div>
-
-          <div class="flex items-center gap-2">
-            <button onclick="rotateImage()" class="px-3 py-1.5 rounded-xl bg-vault-850 hover:bg-vault-800 border border-slate-700 text-slate-300">
-              Rotate 90&deg;
-            </button>
-            <button onclick="resetImageTransform()" class="px-3 py-1.5 rounded-xl bg-vault-850 hover:bg-vault-800 border border-slate-700 text-slate-300">
-              Reset View
-            </button>
-          </div>
+          <button onclick="rotateImage()" class="px-3 py-1.5 rounded-xl bg-vault-850 border border-slate-700 text-slate-300">Rotate 90&deg;</button>
         `;
-      } 
-      // 3. AUDIO VIEWER (Visualizer & Playback)
-      else if (file.category === "audio") {
+      }
+      // 4. AUDIO / VOICE NOTE
+      else if (item.category === "audio") {
         content.innerHTML = `
-          <div class="flex flex-col items-center justify-center py-10 w-full max-w-lg mx-auto text-center">
-            <div class="w-24 h-24 rounded-3xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-6 shadow-xl animate-pulse">
-              <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="flex flex-col items-center justify-center py-10 w-full max-w-lg text-center">
+            <div class="w-20 h-20 rounded-3xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-6 shadow-xl animate-pulse">
+              <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
               </svg>
             </div>
-            
-            <h4 class="text-base font-bold text-white mb-1 truncate max-w-md">${escapeHtml(file.name)}</h4>
-            <p class="text-xs text-slate-400 font-mono mb-6">${formatBytes(file.size)}</p>
-
-            <!-- Audio Wave Animation Simulation -->
-            <div class="flex items-end justify-center gap-1.5 h-12 w-full mb-8">
-              ${[...Array(18)].map((_, i) => `
-                <div class="w-1.5 bg-indigo-500/60 rounded-full animate-bounce" style="height: ${(i % 5 + 2) * 8}px; animation-delay: ${(i * 0.08)}s"></div>
-              `).join('')}
-            </div>
-
-            <audio controls class="w-full rounded-xl outline-none" autoplay>
-              <source src="${fileURL}" type="${file.type}">
-              Your browser does not support audio playback.
-            </audio>
+            <h4 class="text-base font-bold text-white mb-2 truncate max-w-md">${escapeHtml(item.name)}</h4>
+            <audio controls class="w-full rounded-xl mt-4" autoplay src="${fileURL}"></audio>
           </div>
         `;
-
-        controls.innerHTML = `
-          <span class="text-slate-400">High-Definition Lossless Audio Stream</span>
-          <span class="text-emerald-400 font-mono font-semibold">Active In-Browser Player</span>
-        `;
-      } 
-      // 4. PDF VIEWER
-      else if (file.category === "pdf") {
-        content.innerHTML = `
-          <iframe 
-            src="${fileURL}#toolbar=1" 
-            class="w-full h-[65vh] rounded-xl border border-slate-800 shadow-2xl" 
-            title="PDF Preview">
-          </iframe>
-        `;
-        controls.innerHTML = `
-          <span class="text-slate-400">Embedded PDF Viewer Engine</span>
-          <span class="text-slate-400">Supports scroll, print, and search inside frame</span>
-        `;
-      } 
-      // 5. TEXT / CODE VIEWER OR GENERIC FILE INSPECTOR
-      else {
-        // Check if text or code
-        if (file.type.startsWith("text/") || ['txt', 'json', 'js', 'html', 'css', 'py', 'md', 'ts'].includes(file.name.split('.').pop().toLowerCase())) {
-          try {
-            const textContent = await file.blob.text();
-            content.innerHTML = `
-              <pre class="w-full h-[65vh] p-5 rounded-2xl bg-vault-900 border border-slate-800 overflow-auto font-mono text-xs text-slate-200 leading-relaxed selection:bg-indigo-600"><code>${escapeHtml(textContent.slice(0, 50000))}${textContent.length > 50000 ? '\n\n...[Truncated for performance]...' : ''}</code></pre>
-            `;
-            controls.innerHTML = `
-              <span class="text-slate-400">Direct Code / Text Inspector</span>
-              <span class="font-mono text-slate-400">Lines: ${textContent.split('\n').length}</span>
-            `;
-          } catch(err) {
-            renderGenericInspector(file, content, controls);
-          }
-        } else {
-          renderGenericInspector(file, content, controls);
-        }
       }
-
-      document.getElementById("mediaViewerModal").classList.remove("hidden");
-    }
-
-    function renderGenericInspector(file, contentEl, controlsEl) {
-      contentEl.innerHTML = `
-        <div class="flex flex-col items-center justify-center text-center p-8 max-w-md mx-auto">
-          <div class="w-20 h-20 rounded-2xl bg-slate-800/80 border border-slate-700 flex items-center justify-center text-slate-400 mb-4">
-            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-            </svg>
+      // 5. PDF
+      else if (item.category === "pdf") {
+        content.innerHTML = `
+          <iframe src="${fileURL}#toolbar=1" class="w-full h-[65vh] rounded-xl border border-slate-800 shadow-2xl"></iframe>
+        `;
+      }
+      // 6. OTHER BINARY FILES
+      else {
+        content.innerHTML = `
+          <div class="text-center p-8">
+            <h4 class="text-base font-bold text-white mb-2">${escapeHtml(item.name)}</h4>
+            <p class="text-xs text-slate-400 mb-6 font-mono">${formatBytes(item.size)} &bull; ${item.type}</p>
+            <a href="${fileURL}" target="_blank" download class="px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold shadow-lg shadow-indigo-600/30">Download to Open Locally</a>
           </div>
-          <h4 class="text-base font-bold text-white mb-1 truncate max-w-sm">${escapeHtml(file.name)}</h4>
-          <p class="text-xs text-slate-400 mb-6 font-mono">${formatBytes(file.size)} &bull; ${file.type || 'Unknown MIME'}</p>
-          
-          <div class="w-full p-4 rounded-xl bg-vault-900 border border-slate-800 text-left space-y-2 text-xs font-mono text-slate-400">
-            <div><strong class="text-slate-200">Identifier:</strong> ${file.id}</div>
-            <div><strong class="text-slate-200">MIME Type:</strong> ${file.type || 'application/octet-stream'}</div>
-            <div><strong class="text-slate-200">Stored Date:</strong> ${new Date(file.timestamp).toISOString()}</div>
-          </div>
-        </div>
-      `;
-
-      controlsEl.innerHTML = `
-        <span class="text-slate-400">Binary Archive / Non-media Format</span>
-        <button onclick="triggerDirectDownload('${file.id}')" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium">Download to Open Locally</button>
-      `;
+        `;
+      }
     }
 
     function closeMediaViewer() {
       const modal = document.getElementById("mediaViewerModal");
       const content = document.getElementById("viewerContent");
-      // Stop media playing
       const video = content.querySelector("video");
       if (video) { video.pause(); video.src = ""; }
       const audio = content.querySelector("audio");
       if (audio) { audio.pause(); audio.src = ""; }
-
       modal.classList.add("hidden");
       currentActiveViewerFile = null;
     }
 
-    /* Video Player Specific Enhancements */
-    function changeVideoResolution(res) {
-      const video = document.getElementById("activeVideoPlayer");
-      if (!video) return;
+    /* DIRECT DOWNLOAD HANDLER */
+    async function triggerDirectDownload(itemId) {
+      const item = vaultFiles.find(f => f.id === itemId);
+      if (!item) return;
 
-      // Realistic resolution simulation via canvas/filter styles
-      if (res === "360p") {
-        video.style.filter = "blur(1.2px) contrast(95%)";
-        showToast("Switched to 360p (Data Saver mode)", "indigo");
-      } else if (res === "480p") {
-        video.style.filter = "blur(0.6px)";
-        showToast("Switched to 480p (Standard Definition)", "indigo");
-      } else if (res === "720p") {
-        video.style.filter = "none";
-        showToast("Switched to 720p HD", "cyan");
-      } else if (res === "1080p") {
-        video.style.filter = "contrast(105%) saturate(105%)";
-        showToast("Switched to 1080p Full HD", "cyan");
-      } else {
-        video.style.filter = "none";
-        showToast("Restored native master resolution", "indigo");
-      }
-    }
-
-    function changeVideoSpeed(speed) {
-      const video = document.getElementById("activeVideoPlayer");
-      if (video) video.playbackRate = parseFloat(speed);
-    }
-
-    async function toggleVideoPiP() {
-      const video = document.getElementById("activeVideoPlayer");
-      if (!video) return;
-      try {
-        if (document.pictureInPictureElement) {
-          await document.exitPictureInPicture();
-        } else if (document.pictureInPictureEnabled) {
-          await video.requestPictureInPicture();
-        }
-      } catch (e) {
-        showToast("PiP not supported or disallowed: " + e.message, "rose");
-      }
-    }
-
-    function toggleVideoFullScreen() {
-      const video = document.getElementById("activeVideoPlayer");
-      if (!video) return;
-      if (video.requestFullscreen) {
-        video.requestFullscreen();
-      } else if (video.webkitRequestFullscreen) {
-        video.webkitRequestFullscreen();
-      }
-    }
-
-    /* Image Viewer Transformations */
-    function adjustImageZoom(delta) {
-      const img = document.getElementById("activeImageViewer");
-      const display = document.getElementById("zoomDisplay");
-      if (!img) return;
-
-      imgZoomLevel = Math.max(0.5, Math.min(3, imgZoomLevel + delta));
-      applyImageTransforms();
-      display.innerText = Math.round(imgZoomLevel * 100) + "%";
-    }
-
-    function rotateImage() {
-      imgRotation = (imgRotation + 90) % 360;
-      applyImageTransforms();
-    }
-
-    function resetImageTransform() {
-      imgZoomLevel = 1;
-      imgRotation = 0;
-      applyImageTransforms();
-      const display = document.getElementById("zoomDisplay");
-      if (display) display.innerText = "100%";
-    }
-
-    function applyImageTransforms() {
-      const img = document.getElementById("activeImageViewer");
-      if (img) {
-        img.style.transform = `scale(${imgZoomLevel}) rotate(${imgRotation}deg)`;
-      }
-    }
-
-    /* Direct Download Trigger */
-    function triggerDirectDownload(fileId) {
-      const file = vaultFiles.find(f => f.id === fileId);
-      if (!file) return;
-
-      const url = URL.createObjectURL(file.blob);
+      const url = await resolveTelegramDirectUrl(item);
       const a = document.createElement("a");
       a.href = url;
-      a.download = file.name;
+      a.download = item.name;
+      a.target = "_blank";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
-      showToast(`Downloading: ${file.name}`, "emerald");
+      showToast(`Downloading: ${item.name}`, "emerald");
     }
 
-    /* Delete Operations */
-    async function requestDeleteFile(fileId) {
-      try {
-        await deleteFileFromDB(fileId);
-        showToast("File permanently deleted from vault", "indigo");
-        await refreshVaultData();
-      } catch(err) {
-        showToast("Delete failed: " + err.message, "rose");
+    /* ======================================================== */
+    /* 7. AUTH, CONFIGURATION & MODALS                          */
+    /* ======================================================== */
+    function handleUnlock(e) {
+      e.preventDefault();
+      const input = document.getElementById("passwordInput");
+      if (input.value === MASTER_PASS) {
+        document.getElementById("lockError").classList.add("hidden");
+        unlockVaultInterface();
+        sessionStorage.setItem("shaswat_vault_unlocked", "true");
+        input.value = "";
+      } else {
+        document.getElementById("lockError").classList.remove("hidden");
+        showToast("Access Denied: Invalid Passcode", "rose");
       }
     }
 
-    async function purgeAllFiles() {
-      const confirmBox = window.confirm("Are you sure you want to permanently wipe all stored files from this browser vault?");
-      if (confirmBox) {
-        try {
-          await clearAllDBFiles();
-          showToast("All stored vault data has been purged", "rose");
-          await refreshVaultData();
-        } catch(err) {
-          showToast("Purge failed: " + err.message, "rose");
-        }
-      }
+    function unlockVaultInterface() {
+      document.getElementById("lockScreen").classList.add("hidden");
+      document.getElementById("vaultApp").classList.remove("opacity-0", "pointer-events-none");
+      refreshVaultData();
+      startTelegramLiveSync();
     }
 
-    /* Filtering, Search & Sorting */
-    function setFilterCategory(category) {
-      currentFilter = category;
-      document.querySelectorAll(".category-tab").forEach(tab => {
-        tab.className = "category-tab px-3.5 py-2 rounded-xl font-medium text-slate-400 hover:text-slate-200 transition-all";
-      });
-      const activeTab = document.getElementById(`tab-${category}`);
-      if (activeTab) {
-        activeTab.className = "category-tab px-3.5 py-2 rounded-xl font-medium transition-all bg-indigo-600 text-white shadow-sm";
-      }
-      renderFilesList();
+    function lockVault() {
+      sessionStorage.removeItem("shaswat_vault_unlocked");
+      closeMediaViewer();
+      isPolling = false;
+      document.getElementById("vaultApp").classList.add("opacity-0", "pointer-events-none");
+      document.getElementById("lockScreen").classList.remove("hidden");
+      document.getElementById("passwordInput").focus();
     }
 
-    function handleSearch(val) {
-      currentSearch = val;
-      renderFilesList();
-    }
-
-    function handleSortChange(val) {
-      currentSort = val;
-      renderFilesList();
-    }
-
-    /* Hosting Guide Modal */
     function openDeployGuideModal() {
+      document.getElementById("cfgBotToken").value = TELEGRAM_BOT_TOKEN.includes("YOUR_BOT_TOKEN") ? "" : TELEGRAM_BOT_TOKEN;
+      document.getElementById("cfgChatId").value = AUTHORIZED_CHAT_ID.includes("YOUR_CHAT_ID") ? "" : AUTHORIZED_CHAT_ID;
       document.getElementById("deployGuideModal").classList.remove("hidden");
     }
 
@@ -1292,94 +1300,138 @@
       document.getElementById("deployGuideModal").classList.add("hidden");
     }
 
-    /* Toast Notifications */
-    function showToast(message, color = "indigo") {
-      const container = document.getElementById("toastContainer");
-      const toast = document.createElement("div");
-      
-      const colorMap = {
-        indigo: "border-indigo-500/40 bg-vault-900/90 text-indigo-300",
-        emerald: "border-emerald-500/40 bg-vault-900/90 text-emerald-300",
-        rose: "border-rose-500/40 bg-vault-900/90 text-rose-300",
-        cyan: "border-cyan-500/40 bg-vault-900/90 text-cyan-300",
-      };
-
-      toast.className = `p-3.5 px-4 rounded-2xl glass-panel border ${colorMap[color] || colorMap.indigo} text-xs font-semibold shadow-xl flex items-center gap-2 transform transition-all duration-300 translate-y-4 opacity-0`;
-      toast.innerHTML = `
-        <span class="w-2 h-2 rounded-full bg-current"></span>
-        <span>${escapeHtml(message)}</span>
-      `;
-
-      container.appendChild(toast);
-
-      requestAnimationFrame(() => {
-        toast.classList.remove("translate-y-4", "opacity-0");
-      });
-
-      setTimeout(() => {
-        toast.classList.add("opacity-0", "translate-y-2");
-        setTimeout(() => toast.remove(), 300);
-      }, 3500);
+    function saveTelegramConfig() {
+      const token = document.getElementById("cfgBotToken").value.trim();
+      const chat = document.getElementById("cfgChatId").value.trim();
+      if (!token || !chat) {
+        showToast("Please provide both Bot Token and Chat ID", "rose");
+        return;
+      }
+      TELEGRAM_BOT_TOKEN = token;
+      AUTHORIZED_CHAT_ID = chat;
+      localStorage.setItem("shaswat_tg_bot_token", token);
+      localStorage.setItem("shaswat_tg_chat_id", chat);
+      closeDeployGuideModal();
+      showToast("Telegram configuration saved!", "emerald");
+      isPolling = false;
+      startTelegramLiveSync();
     }
 
-    /* Helpers & Utilities */
-    function formatBytes(bytes, decimals = 2) {
-      if (bytes === 0) return '0.00 B';
+    function openTextBroadcastModal() {
+      document.getElementById("textBroadcastModal").classList.remove("hidden");
+      document.getElementById("broadcastTextInput").focus();
+    }
+
+    function closeTextBroadcastModal() {
+      document.getElementById("textBroadcastModal").classList.add("hidden");
+    }
+
+    /* ======================================================== */
+    /* 8. UI HELPERS & CATEGORY DETECTORS                       */
+    /* ======================================================== */
+    function detectFileCategory(mime, filename) {
+      const ext = filename.split('.').pop().toLowerCase();
+      if (mime.startsWith("image/") || ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'].includes(ext)) return "image";
+      if (mime.startsWith("video/") || ['mp4', 'webm', 'ogg', 'mov', 'mkv'].includes(ext)) return "video";
+      if (mime.startsWith("audio/") || ['mp3', 'wav', 'ogg', 'm4a', 'flac'].includes(ext)) return "audio";
+      if (mime === "application/pdf" || ext === "pdf") return "pdf";
+      if (mime.startsWith("text/") || ['txt', 'md', 'json', 'py', 'js', 'html', 'css'].includes(ext)) return "text";
+      return "other";
+    }
+
+    function formatBytes(bytes) {
+      if (!bytes || bytes === 0) return '0.00 B';
       const k = 1024;
-      const dm = decimals < 0 ? 0 : decimals;
-      const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+      const sizes = ['B', 'KB', 'MB', 'GB'];
       const i = Math.floor(Math.log(bytes) / Math.log(k));
-      return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
 
-    function escapeHtml(string) {
-      if (!string) return '';
-      return String(string).replace(/[&<>"']/g, function (s) {
-        return {
-          '&': '&amp;',
-          '<': '&lt;',
-          '>': '&gt;',
-          '"': '&quot;',
-          "'": '&#39;'
-        }[s];
+    function escapeHtml(s) {
+      return String(s || '').replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[m]);
+    }
+
+    function triggerFileInput() { document.getElementById("filePicker").click(); }
+    function handleFilesSelected(e) { if (e.target.files) { processUploadedFiles(Array.from(e.target.files)); e.target.value = ""; } }
+    function handleDragOver(e) { e.preventDefault(); }
+    function handleDragLeave(e) { e.preventDefault(); }
+    function handleDrop(e) { e.preventDefault(); if (e.dataTransfer?.files) processUploadedFiles(Array.from(e.dataTransfer.files)); }
+    function togglePasswordVisibility() { const p = document.getElementById("passwordInput"); p.type = p.type === "password" ? "text" : "password"; }
+    function fillDefaultPassword() { document.getElementById("passwordInput").value = MASTER_PASS; }
+    
+    function setFilterCategory(category) {
+      currentFilter = category;
+      document.querySelectorAll(".category-tab").forEach(tab => {
+        tab.className = "category-tab px-3.5 py-2 rounded-xl font-medium text-slate-400 hover:text-slate-200 transition-all";
       });
+      const active = document.getElementById(`tab-${category}`);
+      if (active) active.className = "category-tab px-3.5 py-2 rounded-xl font-medium transition-all bg-indigo-600 text-white shadow-sm";
+      renderFilesList();
+    }
+
+    function handleSearch(val) { currentSearch = val; renderFilesList(); }
+    function handleSortChange(val) { currentSort = val; renderFilesList(); }
+    
+    function adjustImageZoom(d) {
+      imgZoomLevel = Math.max(0.5, Math.min(3, imgZoomLevel + d));
+      applyTransforms();
+    }
+    function rotateImage() {
+      imgRotation = (imgRotation + 90) % 360;
+      applyTransforms();
+    }
+    function applyTransforms() {
+      const img = document.getElementById("activeImageViewer");
+      if (img) img.style.transform = `scale(${imgZoomLevel}) rotate(${imgRotation}deg)`;
+      const disp = document.getElementById("zoomDisplay");
+      if (disp) disp.innerText = Math.round(imgZoomLevel * 100) + "%";
+    }
+
+    function toggleVideoFullScreen() {
+      const v = document.getElementById("activeVideoPlayer");
+      if (v?.requestFullscreen) v.requestFullscreen();
+    }
+    function changeVideoSpeed(s) {
+      const v = document.getElementById("activeVideoPlayer");
+      if (v) v.playbackRate = parseFloat(s);
+    }
+
+    function showToast(msg, color = "indigo") {
+      const box = document.getElementById("toastContainer");
+      const el = document.createElement("div");
+      el.className = "p-3.5 rounded-2xl bg-vault-900 border border-slate-700 text-xs font-semibold text-white shadow-xl flex items-center gap-2";
+      el.innerHTML = `<span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span><span>${escapeHtml(msg)}</span>`;
+      box.appendChild(el);
+      setTimeout(() => el.remove(), 3500);
     }
 
     function getCategoryIconSVG(cat) {
-      switch(cat) {
-        case 'video':
-          return `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>`;
-        case 'image':
-          return `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`;
-        case 'audio':
-          return `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>`;
-        case 'pdf':
-          return `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>`;
-        default:
-          return `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>`;
-      }
+      if (cat === 'text') return `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>`;
+      if (cat === 'video') return `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>`;
+      if (cat === 'image') return `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`;
+      if (cat === 'audio') return `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>`;
+      if (cat === 'pdf') return `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>`;
+      return `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>`;
     }
 
-    // Keyboard Shortcuts (Esc to close viewer)
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
         closeMediaViewer();
         closeDeployGuideModal();
+        closeTextBroadcastModal();
       }
     });
 
-    // App Initialization
     window.onload = async function() {
       try {
         await initDatabase();
-        // Check if unlocked previously in session
         if (sessionStorage.getItem("shaswat_vault_unlocked") === "true") {
           unlockVaultInterface();
         } else {
-          document.getElementById("passwordInput").focus();
+          document.getElementById("passwordInput")?.focus();
         }
       } catch (err) {
-        console.error("Initialization error:", err);
+        console.error("Init Error:", err);
       }
     };
   </script>
