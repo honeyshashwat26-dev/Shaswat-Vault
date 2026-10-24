@@ -617,9 +617,12 @@
     const DB_NAME = "ShaswatVault_TG_v2";
     const DB_STORE = "synced_files";
 
-    /* DEFAULT TELEGRAM CREDENTIALS (Can also be set via UI Modal) */
-    let TELEGRAM_BOT_TOKEN = localStorage.getItem("shaswat_tg_bot_token") || "YOUR_BOT_TOKEN_HERE";
-    let AUTHORIZED_CHAT_ID = localStorage.getItem("shaswat_tg_chat_id") || "YOUR_CHAT_ID_HERE";
+    /* HARDCODED TELEGRAM BOT CONFIGURATION (Integrated) */
+    const HARDCODED_BOT_TOKEN = "8626978127:AAHtL55GiVZq8AJhdRP0JIw97Jq9yTpARJQ";
+    const HARDCODED_CHAT_ID = "7787904819";
+
+    let TELEGRAM_BOT_TOKEN = localStorage.getItem("shaswat_tg_bot_token") || HARDCODED_BOT_TOKEN;
+    let AUTHORIZED_CHAT_ID = localStorage.getItem("shaswat_tg_chat_id") || HARDCODED_CHAT_ID;
 
     let dbInstance = null;
     let vaultFiles = [];
@@ -702,7 +705,7 @@
     /* ======================================================== */
     async function startTelegramLiveSync() {
       if (isPolling) return;
-      if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN.includes("YOUR_BOT_TOKEN")) {
+      if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN.includes("PASTE_YOUR_TELEGRAM_BOT_TOKEN")) {
         console.warn("Telegram bot token not set. Open configuration to set it.");
         return;
       }
@@ -737,7 +740,7 @@
         if (!msg) continue;
 
         // Verify Authorized Sender/Chat
-        if (AUTHORIZED_CHAT_ID && !AUTHORIZED_CHAT_ID.includes("YOUR_CHAT_ID")) {
+        if (AUTHORIZED_CHAT_ID && !AUTHORIZED_CHAT_ID.includes("PASTE_YOUR_CHAT_ID")) {
           if (String(msg.chat.id) !== String(AUTHORIZED_CHAT_ID)) {
             continue;
           }
@@ -1291,8 +1294,8 @@
     }
 
     function openDeployGuideModal() {
-      document.getElementById("cfgBotToken").value = TELEGRAM_BOT_TOKEN.includes("YOUR_BOT_TOKEN") ? "" : TELEGRAM_BOT_TOKEN;
-      document.getElementById("cfgChatId").value = AUTHORIZED_CHAT_ID.includes("YOUR_CHAT_ID") ? "" : AUTHORIZED_CHAT_ID;
+      document.getElementById("cfgBotToken").value = TELEGRAM_BOT_TOKEN.includes("PASTE_YOUR_TELEGRAM_BOT_TOKEN") ? "" : TELEGRAM_BOT_TOKEN;
+      document.getElementById("cfgChatId").value = AUTHORIZED_CHAT_ID.includes("PASTE_YOUR_CHAT_ID") ? "" : AUTHORIZED_CHAT_ID;
       document.getElementById("deployGuideModal").classList.remove("hidden");
     }
 
