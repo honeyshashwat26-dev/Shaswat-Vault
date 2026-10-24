@@ -456,7 +456,7 @@
           <div class="rounded-2xl bg-vault-900/80 border border-slate-800 p-4 space-y-3">
             <h3 class="text-sm font-bold text-white">B. Receive on another device</h3>
             <p class="text-xs text-slate-400">Open the same GitHub Pages website, unlock the vault, then enter the code generated on the sending device.</p>
-            <input id="p2pJoinCode" maxlength="80" autocomplete="off" placeholder="Paste transfer code here" class="w-full px-3 py-2.5 rounded-xl bg-vault-950 border border-slate-700 focus:border-cyan-500 text-white font-mono text-xs outline-none" />
+            <input id="p2pJoinCode" maxlength="14" autocomplete="off" placeholder="Paste short transfer code here" class="w-full px-3 py-2.5 rounded-xl bg-vault-950 border border-slate-700 focus:border-cyan-500 text-white font-mono text-xs outline-none" />
             <button id="p2pJoinBtn" onclick="joinVaultSharing()" class="w-full py-2.5 px-4 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white">Connect to Sender</button>
             <p class="text-[11px] text-slate-500">Incoming files are saved to this device's own IndexedDB. Existing files with the same name are not automatically deleted.</p>
           </div>
@@ -652,11 +652,19 @@
 
     async function saveFileToDB(fileRecord) {
       return new Promise((resolve, reject) => {
-        const tx = dbInstance.transaction([DB_STORE], "readwrite");
-        const store = tx.objectStore(DB_STORE);
-        const req = store.put(fileRecord);
-        req.onsuccess = () => resolve(true);
-        req.onerror = (e) => reject(e);
+        let tx;
+        try {
+          tx = dbInstance.transaction([DB_STORE], "readwrite");
+          tx.objectStore(DB_STORE).put(fileRecord);
+        } catch (err) {
+          reject(err);
+          return;
+        }
+        // A successful put request does not guarantee the transaction committed.
+        // Resolve only on transaction completion so receive progress is trustworthy.
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = () => reject(tx.error || new Error("IndexedDB write failed"));
+        tx.onabort = () => reject(tx.error || new Error("IndexedDB write was aborted"));
       });
     }
 
@@ -1347,13 +1355,24 @@
        ======================================================== */
     let vaultPeer = null;
     let vaultConnection = null;
+    let vaultConnectionFiles = null;
     let vaultSharingActive = false;
     let p2pIncomingChunks = [];
+    let p2pIncomingBytes = 0;
     let p2pIncomingMeta = null;
+    let p2pManifestTotalBytes = 0;
+    let p2pCompletedBytes = 0;
+    let p2pManifestFileCount = 0;
+    let p2pCompletedFiles = 0;
+    let p2pReceiveFailures = [];
+    let p2pLastProgressReport = 0;
+    let p2pReceiveQueue = Promise.resolve();
     let p2pReceiveApproved = false;
     let p2pTransferCancelled = false;
-    const P2P_CHUNK_SIZE = 64 * 1024;
-    const P2P_MAX_BUFFERED = 2 * 1024 * 1024;
+    // Larger chunks reduce per-message overhead; the queue cap keeps memory bounded.
+    const P2P_CHUNK_SIZE = 256 * 1024;
+    const P2P_MAX_BUFFERED = 8 * 1024 * 1024;
+    const P2P_PROGRESS_STEP = 1024 * 1024;
 
     function setP2PStatus(message, color = "slate") {
       const el = document.getElementById("p2pStatus");
@@ -1378,9 +1397,10 @@
     }
 
     function makeTransferCode() {
-      const bytes = new Uint8Array(18);
+      // 12 hex characters = 48 random bits; the host still has to approve every connection.
+      const bytes = new Uint8Array(6);
       crypto.getRandomValues(bytes);
-      return "vault-" + Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
+      return "v-" + Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
     }
 
     async function startVaultSharing() {
@@ -1393,9 +1413,7 @@
       setP2PStatus("Connecting to signaling service…", "amber");
       document.getElementById("p2pHostBtn").disabled = true;
       try {
-        vaultPeer = new Peer(code, {
-          debug: 1
-        });
+        vaultPeer = new Peer(code, { debug: 0 });
         vaultPeer.on("open", id => {
           vaultSharingActive = true;
           document.getElementById("p2pHostCode").value = id;
@@ -1419,16 +1437,29 @@
           vaultConnection = conn;
           p2pReceiveApproved = false;
           setP2PStatus("Receiver connected", "cyan");
-          conn.on("open", () => {
-            conn.send({ type: "vault-manifest", files: vaultFiles.map(f => ({
-              id: f.id, name: f.name, size: f.size, type: f.type || "application/octet-stream",
-              category: f.category, timestamp: f.timestamp
-            })) });
-            showToast("Receiver approved. Sending file list.", "cyan");
+          conn.on("open", async () => {
+            try {
+              // Use one IndexedDB snapshot for both the manifest and the actual send.
+              // This prevents a stale UI list from producing a wrong file count/progress.
+              vaultConnectionFiles = await getAllFilesFromDB();
+              if (!conn.open) return;
+              conn.send({ type: "vault-manifest", files: vaultConnectionFiles.map(f => ({
+                id: f.id, name: f.name, size: Number(f.size) || (f.blob && f.blob.size) || 0,
+                type: f.type || "application/octet-stream", category: f.category, timestamp: f.timestamp
+              })) });
+              showToast("Receiver approved. Sending file list.", "cyan");
+            } catch (err) {
+              console.error("Could not read vault files:", err);
+              try { conn.send({ type: "transfer-error", message: "Could not read files from this browser's vault." }); } catch {}
+              setP2PStatus("Could not read vault", "red");
+            }
           });
           conn.on("data", data => handleP2PHostData(conn, data));
           conn.on("close", () => {
-            if (vaultConnection === conn) vaultConnection = null;
+            if (vaultConnection === conn) {
+              vaultConnection = null;
+              vaultConnectionFiles = null;
+            }
             setP2PStatus("Transfer connection closed", "slate");
           });
           conn.on("error", err => {
@@ -1487,7 +1518,7 @@
         return;
       }
       const code = document.getElementById("p2pJoinCode").value.trim();
-      if (!/^vault-[a-f0-9]{36}$/i.test(code)) {
+      if (!/^v-[a-f0-9]{12}$/i.test(code)) {
         showToast("Enter the complete transfer code generated by the sender.", "rose");
         return;
       }
@@ -1495,20 +1526,40 @@
         try { vaultPeer.destroy(); } catch {}
       }
       document.getElementById("p2pJoinBtn").disabled = true;
+      p2pReceiveQueue = Promise.resolve();
+      p2pManifestTotalBytes = 0;
+      p2pCompletedBytes = 0;
+      p2pManifestFileCount = 0;
+      p2pCompletedFiles = 0;
+      p2pReceiveFailures = [];
+      p2pLastProgressReport = 0;
       setP2PStatus("Connecting to sender…", "amber");
-      vaultPeer = new Peer(undefined, { debug: 1 });
+      vaultPeer = new Peer(undefined, { debug: 0 });
       vaultPeer.on("open", () => {
         vaultConnection = vaultPeer.connect(code, { reliable: true, serialization: "binary" });
         vaultConnection.on("open", () => {
           setP2PStatus("Connected; waiting for file list", "cyan");
           showToast("Connected. The sender must approve the connection.", "cyan");
         });
-        vaultConnection.on("data", data => handleP2PReceiverData(vaultConnection, data));
-        vaultConnection.on("close", () => {
+        const receiverConn = vaultConnection;
+        receiverConn.on("data", data => {
+          // Process events in order. Without this queue, the next file-start could
+          // overwrite the current file state while IndexedDB is still saving it.
+          p2pReceiveQueue = p2pReceiveQueue
+            .then(() => handleP2PReceiverData(receiverConn, data))
+            .catch(err => {
+              console.error("P2P receive processing error:", err);
+              p2pReceiveFailures.push(err && err.message ? err.message : "Unknown receive error");
+              setP2PStatus("Receive error", "red");
+              showToast("Receive error: " + (err && err.message ? err.message : "unknown error"), "rose");
+            });
+        });
+        receiverConn.on("close", () => {
+          if (vaultConnection === receiverConn) vaultConnection = null;
           setP2PStatus("Connection closed", "slate");
           document.getElementById("p2pJoinBtn").disabled = false;
         });
-        vaultConnection.on("error", err => {
+        receiverConn.on("error", err => {
           console.error(err);
           setP2PStatus("Connection error", "red");
           document.getElementById("p2pJoinBtn").disabled = false;
@@ -1525,11 +1576,34 @@
 
     async function handleP2PHostData(conn, data) {
       if (!data || typeof data !== "object" || !data.type) return;
+      if (data.type === "transfer-progress") {
+        const total = Number(data.totalBytes) || 0;
+        const received = Number(data.receivedBytes) || 0;
+        const pct = total ? Math.min(99, received / total * 100) : 99;
+        setP2PProgress("Receiver received " + formatBytes(received) + " of " + formatBytes(total), pct);
+        return;
+      }
+      if (data.type === "file-received" || data.type === "file-receive-error") {
+        return; // Per-file acknowledgements are informational.
+      }
+      if (data.type === "transfer-result") {
+        if (data.success) {
+          setP2PProgress("Receiver saved all " + data.completedFiles + " file(s)", 100);
+          setP2PStatus("Transfer complete", "green");
+          showToast("Receiver confirmed that all files were saved.", "emerald");
+        } else {
+          const pct = data.totalFiles ? Math.min(99, data.completedFiles / data.totalFiles * 100) : 0;
+          setP2PProgress("Receiver saved " + data.completedFiles + "/" + data.totalFiles + " files", pct);
+          setP2PStatus("Transfer incomplete", "red");
+          showToast("Receiver could not save every file: " + (data.message || "storage or transfer error"), "rose");
+        }
+        return;
+      }
       if (data.type === "start-transfer") {
         if (p2pReceiveApproved) return;
         p2pReceiveApproved = true;
         try {
-          await sendVaultFilesToPeer(conn);
+          await sendVaultFilesToPeer(conn, vaultConnectionFiles);
         } catch (err) {
           console.error(err);
           try { conn.send({ type: "transfer-error", message: err.message || "Transfer failed" }); } catch {}
@@ -1538,9 +1612,9 @@
       }
     }
 
-    async function sendVaultFilesToPeer(conn) {
+    async function sendVaultFilesToPeer(conn, snapshot) {
       p2pTransferCancelled = false;
-      const files = await getAllFilesFromDB();
+      const files = Array.isArray(snapshot) ? snapshot : await getAllFilesFromDB();
       const totalBytes = files.reduce((sum, f) => sum + (f.size || 0), 0);
       let sentBytes = 0;
       setP2PStatus("Transferring files…", "cyan");
@@ -1558,20 +1632,24 @@
           conn.send(chunk);
           offset += chunk.byteLength;
           sentBytes += chunk.byteLength;
-          setP2PProgress("Sending " + f.name, totalBytes ? sentBytes / totalBytes * 100 : 100);
+          // The receiver sends progress acknowledgements based on bytes it actually
+          // processed; do not display queued bytes as if they were already received.
+          if (sentBytes === chunk.byteLength || offset >= f.size) {
+            setP2PStatus("Sending " + f.name + "…", "cyan");
+          }
         }
         conn.send({ type: "file-end", id: f.id });
       }
       conn.send({ type: "transfer-complete", files: files.length, bytes: totalBytes });
-      setP2PProgress("Transfer complete", 100);
-      setP2PStatus("Transfer complete", "green");
-      showToast("Sent " + files.length + " file(s).", "emerald");
+      setP2PProgress("All data queued; awaiting receiver confirmation", totalBytes ? 99 : 100);
+      setP2PStatus("Data sent; awaiting receiver confirmation", "cyan");
+      showToast("All data sent. The receiver must finish saving the files.", "cyan");
     }
 
     async function waitForPeerBuffer(conn) {
       // Prevent the browser's WebRTC send queue from growing without bound.
       while (conn && conn.open && conn.dataChannel && conn.dataChannel.bufferedAmount > P2P_MAX_BUFFERED) {
-        await new Promise(resolve => setTimeout(resolve, 25));
+        await new Promise(resolve => setTimeout(resolve, 10));
       }
     }
 
@@ -1581,6 +1659,15 @@
           const list = Array.isArray(data.files) ? data.files : [];
           const count = list.length;
           const size = list.reduce((sum, f) => sum + (Number(f.size) || 0), 0);
+          p2pManifestTotalBytes = size;
+          p2pManifestFileCount = count;
+          p2pCompletedBytes = 0;
+          p2pCompletedFiles = 0;
+          p2pReceiveFailures = [];
+          p2pLastProgressReport = 0;
+          p2pIncomingChunks = [];
+          p2pIncomingBytes = 0;
+          p2pIncomingMeta = null;
           const okay = window.confirm("The sender is offering " + count + " file(s) (" + formatBytes(size) + "). Import them into this browser's IndexedDB? Existing files will remain.");
           if (!okay) {
             conn.send({ type: "cancel-transfer" });
@@ -1591,21 +1678,30 @@
           }
           conn.send({ type: "start-transfer" });
           setP2PStatus("Receiving files…", "cyan");
-          setP2PProgress("Waiting for first file…", size ? 0 : 100);
+          setP2PProgress("Receiving 0 of " + count + " files", size ? 0 : 100);
           return;
         }
         if (data.type === "file-start") {
           p2pIncomingMeta = data;
           p2pIncomingChunks = [];
-          setP2PProgress("Receiving " + data.name, 0);
+          p2pIncomingBytes = 0;
+          setP2PProgress("Receiving " + data.name,
+            p2pManifestTotalBytes
+              ? Math.min(99.9, p2pCompletedBytes / p2pManifestTotalBytes * 100)
+              : 0);
           return;
         }
         if (data.type === "file-end") {
-          if (!p2pIncomingMeta || p2pIncomingMeta.id !== data.id) return;
+          if (!p2pIncomingMeta || p2pIncomingMeta.id !== data.id) {
+            throw new Error("Received an unexpected file-end marker.");
+          }
+          const meta = p2pIncomingMeta;
           try {
-            const meta = p2pIncomingMeta;
             const blob = new Blob(p2pIncomingChunks, { type: meta.mime || "application/octet-stream" });
-            if (blob.size !== Number(meta.size)) throw new Error("File size verification failed for " + meta.name);
+            if (blob.size !== Number(meta.size)) {
+              throw new Error("File size mismatch for " + (meta.name || "file") +
+                " (received " + blob.size + " of " + Number(meta.size) + " bytes).");
+            }
             const record = {
               id: "vault_import_" + crypto.randomUUID(),
               name: String(meta.name || "imported-file").slice(0, 500),
@@ -1616,21 +1712,54 @@
               blob
             };
             await saveFileToDB(record);
-            p2pIncomingChunks = [];
-            p2pIncomingMeta = null;
-            await refreshVaultData();
+            p2pCompletedBytes += blob.size;
+            p2pCompletedFiles++;
             showToast("Imported file: " + record.name, "emerald");
+            try {
+              conn.send({ type: "file-received", id: meta.id, bytes: blob.size });
+              conn.send({ type: "transfer-progress", receivedBytes: p2pCompletedBytes,
+                totalBytes: p2pManifestTotalBytes });
+            } catch {}
           } catch (err) {
-            console.error(err);
-            showToast("Could not save received file: " + err.message, "rose");
+            console.error("Could not import received file:", err);
+            p2pReceiveFailures.push((meta.name || "file") + ": " + (err.message || "save failed"));
+            try {
+              conn.send({ type: "file-receive-error", id: meta.id, message: err.message || "Save failed" });
+            } catch {}
+            showToast("Could not save received file: " + (err.message || "unknown error"), "rose");
+          } finally {
+            p2pIncomingChunks = [];
+            p2pIncomingBytes = 0;
+            p2pIncomingMeta = null;
           }
+          setP2PProgress("Received " + p2pCompletedFiles + " of " + p2pManifestFileCount + " files",
+            p2pManifestTotalBytes
+              ? Math.min(99.9, p2pCompletedBytes / p2pManifestTotalBytes * 100)
+              : (p2pManifestFileCount === p2pCompletedFiles ? 100 : 0));
           return;
         }
         if (data.type === "transfer-complete") {
           await refreshVaultData();
-          setP2PProgress("Transfer complete: " + data.files + " file(s)", 100);
-          setP2PStatus("Transfer complete", "green");
-          showToast("Import complete. Files are saved in this browser's IndexedDB.", "emerald");
+          const failed = p2pReceiveFailures.length;
+          const success = failed === 0 && p2pCompletedFiles === p2pManifestFileCount;
+          const resultMessage = failed
+            ? p2pReceiveFailures.slice(0, 3).join("; ")
+            : (p2pManifestFileCount - p2pCompletedFiles) + " file(s) were not saved";
+          if (!success) {
+            setP2PProgress("Finished with errors: " + p2pCompletedFiles + "/" + p2pManifestFileCount + " files",
+              p2pManifestFileCount ? p2pCompletedFiles / p2pManifestFileCount * 100 : 0);
+            setP2PStatus("Transfer incomplete", "red");
+            showToast("Transfer finished but " + (failed || (p2pManifestFileCount - p2pCompletedFiles)) +
+              " file(s) failed. Check storage quota and connection.", "rose");
+          } else {
+            setP2PProgress("Transfer complete: " + p2pCompletedFiles + " file(s)", 100);
+            setP2PStatus("Transfer complete", "green");
+            showToast("Import complete. All files were saved in this browser's IndexedDB.", "emerald");
+          }
+          try {
+            conn.send({ type: "transfer-result", success, completedFiles: p2pCompletedFiles,
+              totalFiles: p2pManifestFileCount, message: resultMessage });
+          } catch (err) { console.warn("Could not send final transfer confirmation:", err); }
           document.getElementById("p2pJoinBtn").disabled = false;
           return;
         }
@@ -1641,14 +1770,41 @@
           return;
         }
       }
+      let binaryPart = null;
+      let binaryLength = 0;
       if (data instanceof ArrayBuffer) {
-        if (!p2pIncomingMeta) return;
-        p2pIncomingChunks.push(data);
-        const received = p2pIncomingChunks.reduce((sum, part) => sum + part.byteLength, 0);
-        setP2PProgress("Receiving " + p2pIncomingMeta.name, p2pIncomingMeta.size ? received / p2pIncomingMeta.size * 100 : 100);
+        binaryPart = data;
+        binaryLength = data.byteLength;
+      } else if (ArrayBuffer.isView(data)) {
+        // Preserve only the view's bytes, not the entire backing buffer.
+        binaryPart = data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength);
+        binaryLength = data.byteLength;
       } else if (data instanceof Blob) {
-        if (!p2pIncomingMeta) return;
-        p2pIncomingChunks.push(data);
+        binaryPart = data;
+        binaryLength = data.size;
+      }
+      if (binaryPart !== null) {
+        if (!p2pIncomingMeta) {
+          throw new Error("Received file data before a file-start marker.");
+        }
+        p2pIncomingChunks.push(binaryPart);
+        p2pIncomingBytes += binaryLength;
+        const overallPercent = p2pManifestTotalBytes
+          ? Math.min(99.9, (p2pCompletedBytes + p2pIncomingBytes) / p2pManifestTotalBytes * 100)
+          : (Number(p2pIncomingMeta.size) ? p2pIncomingBytes / Number(p2pIncomingMeta.size) * 100 : 0);
+        if (p2pIncomingBytes % P2P_PROGRESS_STEP < binaryLength ||
+            p2pIncomingBytes >= Number(p2pIncomingMeta.size)) {
+          setP2PProgress("Receiving " + p2pIncomingMeta.name, overallPercent);
+        }
+        const actualReceived = p2pCompletedBytes + p2pIncomingBytes;
+        if (actualReceived - p2pLastProgressReport >= P2P_PROGRESS_STEP ||
+            p2pIncomingBytes >= Number(p2pIncomingMeta.size)) {
+          p2pLastProgressReport = actualReceived;
+          try {
+            conn.send({ type: "transfer-progress", receivedBytes: actualReceived,
+              totalBytes: p2pManifestTotalBytes });
+          } catch {}
+        }
       }
     }
 
