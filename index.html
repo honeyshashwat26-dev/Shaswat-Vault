@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shaswat Private Cloud Vault</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            vault: {
+              950: '#07090e',
+              900: '#0b0f19',
+              850: '#111726',
+              800: '#161f36',
+              700: '#222f4f',
+              accent: '#6366f1',
+              cyan: '#06b6d4',
+              violet: '#8b5cf6',
+              pink: '#ec4899',
+            }
+          },
+          animation: {
+            'glow-pulse': 'glowPulse 3s ease-in-out infinite',
+            'shake': 'shake 0.4s cubic-bezier(.36,.07,.19,.97) both',
+          },
+          keyframes: {
+            glowPulse: {
+              '0%, 100%': { opacity: 0.4, transform: 'scale(1)' },
+              '50%': { opacity: 0.8, transform: 'scale(1.05)' },
+            },
+            shake: {
+              '10%, 90%': { transform: 'translate3d(-2px, 0, 0)' },
+              '20%, 80%': { transform: 'translate3d(4px, 0, 0)' },
+              '30%, 50%, 70%': { transform: 'translate3d(-6px, 0, 0)' },
+              '40%, 60%': { transform: 'translate3d(6px, 0, 0)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f19;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #222f4f;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6366f1;
+    }
+    .glass-panel {
+      background: rgba(17, 23, 38, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card {
+      background: rgba(22, 31, 54, 0.5);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-card:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.15);
+    }
+  </style>
+</head>
+<body class="bg-vault-950 text-slate-100 font-sans min-h-screen selection:bg-indigo-500 selection:text-white antialiased overflow-x-hidden">
+
+  <!-- Background Ambient Lights -->
+  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl animate-glow-pulse"></div>
+    <div class="absolute top-1/2 -right-40 w-[30rem] h-[30rem] bg-violet-600/15 rounded-full blur-[120px] animate-glow-pulse" style="animation-delay: 1.5s;"></div>
+    <div class="absolute -bottom-20 left-1/3 w-80 h-80 bg-cyan-500/15 rounded-full blur-[100px]"></div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 1. LOCK SCREEN OVERLAY                                  -->
+  <!-- ======================================================== -->
+  <div id="lockScreen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-vault-950/90 backdrop-blur-2xl transition-all duration-500">
+    <div id="lockCard" class="w-full max-w-md p-8 rounded-3xl glass-panel shadow-2xl relative border border-white/10 text-center">
+      
+      <!-- Vault Icon / Logo -->
+      <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 p-0.5 shadow-lg shadow-indigo-500/30">
+        <div class="w-full h-full bg-vault-900 rounded-[14px] flex items-center justify-center">
+          <svg class="w-10 h-10 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+        </div>
+      </div>
+
+      <h1 class="text-2xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+        Shaswat Cloud Vault
+      </h1>
+      <p class="text-xs text-slate-400 mt-1.5 mb-6">Encrypted Client-Side Storage &bull; 4GB Limit &bull; Zero Server Leak</p>
+
+      <!-- Password Form -->
+      <form id="unlockForm" onsubmit="handleUnlock(event)" class="space-y-4">
+        <div class="relative">
+          <input 
+            type="password" 
+            id="passwordInput"
+            placeholder="Enter Master Password..." 
+            autocomplete="current-password"
+            class="w-full px-5 py-3.5 rounded-xl bg-vault-850/90 border border-slate-700/60 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30 text-white placeholder-slate-500 text-sm outline-none transition-all pr-12 text-center tracking-widest font-mono"
+            required
+          />
+          <button 
+            type="button" 
+            onclick="togglePasswordVisibility()" 
+            class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 p-1">
+            <svg id="eyeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+          </button>
+        </div>
+
+        <p id="lockError" class="text-xs text-rose-400 font-medium hidden">Incorrect password. Please try again.</p>
+
+        <button 
+          type="submit" 
+          class="w-full py-3.5 px-6 rounded-xl font-semibold text-sm bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-600 hover:from-indigo-600 hover:to-violet-700 text-white shadow-lg shadow-indigo-600/30 transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2">
+          <span>Decrypt & Unlock Vault</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+          </svg>
+        </button>
+      </form>
+
+      <div class="mt-6 pt-5 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500">
+        <span class="flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+          IndexedDB Persistent
+        </span>
+        <button onclick="fillDefaultPassword()" class="text-indigo-400 hover:text-indigo-300 transition-colors">Default: "Shaswat"</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 2. MAIN APPLICATION WORKSPACE                            -->
+  <!-- ======================================================== -->
+  <div id="vaultApp" class="relative z-10 flex flex-col min-h-screen opacity-0 pointer-events-none transition-opacity duration-300">
+    
+    <!-- Top Navigation -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-slate-800/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+        
+        <!-- Brand Title -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 p-0.5 shadow-md shadow-indigo-500/20">
+            <div class="w-full h-full bg-vault-900 rounded-[10px] flex items-center justify-center">
+              <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"/>
+              </svg>
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-lg font-bold text-white tracking-tight leading-none">Shaswat Cloud Vault</h1>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PRO 4GB</span>
+            </div>
+            <p class="text-xs text-slate-400 leading-none mt-1">Permanent In-Browser Zero-Server Cloud</p>
+          </div>
+        </div>
+
+        <!-- Right Quick Controls -->
+        <div class="flex items-center gap-3">
+          <!-- Guide Modal Button -->
+          <button 
+            onclick="openDeployGuideModal()" 
+            class="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium bg-vault-850 hover:bg-vault-800 border border-slate-700/60 text-slate-300 transition-all">
+            <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Host Free Forever</span>
+          </button>
+
+          <!-- Lock Button -->
+          <button 
+            onclick="lockVault()" 
+            class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 transition-all active:scale-95">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <span>Lock</span>
+          </button>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      
+      <!-- ======================================================== -->
+      <!-- TOP STATUS: CAPACITY & STATS GAUGE                       -->
+      <!-- ======================================================== -->
+      <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Storage Card -->
+        <div class="lg:col-span-2 glass-panel p-6 rounded-3xl relative overflow-hidden">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+            <div>
+              <span class="text-xs uppercase tracking-wider font-semibold text-indigo-400">Vault Capacity</span>
+              <div class="flex items-baseline gap-2 mt-0.5">
+                <span id="usedStorageDisplay" class="text-2xl sm:text-3xl font-extrabold text-white">0.00 MB</span>
+                <span class="text-sm text-slate-400">used of <strong class="text-slate-200">4.00 GB Max</strong></span>
+              </div>
+            </div>
+            <div class="text-right flex items-center sm:block gap-2">
+              <span id="storagePercentDisplay" class="text-xl sm:text-2xl font-bold font-mono text-cyan-400">0.0%</span>
+              <p class="text-xs text-slate-400">Quota Consumed</p>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="w-full h-3 bg-vault-950/80 rounded-full overflow-hidden p-0.5 border border-slate-800">
+            <div 
+              id="storageProgressBar" 
+              class="h-full bg-gradient-to-r from-indigo-500 via-cyan-400 to-pink-500 rounded-full transition-all duration-500" 
+              style="width: 0%"></div>
+          </div>
+
+          <!-- Quick Micro Metrics -->
+          <div class="grid grid-cols-3 gap-2 mt-5 pt-4 border-t border-slate-800/60 text-xs">
+            <div>
+              <span class="text-slate-400 block">Total Files</span>
+              <span id="metricFileCount" class="font-bold text-white text-sm">0 items</span>
+            </div>
+            <div>
+              <span class="text-slate-400 block">Remaining Free</span>
+              <span id="metricRemaining" class="font-bold text-emerald-400 text-sm">4096.00 MB</span>
+            </div>
+            <div>
+              <span class="text-slate-400 block">DB Storage Status</span>
+              <span class="font-bold text-indigo-400 text-sm flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+                Active Persisted
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions & Clear DB -->
+        <div class="glass-panel p-6 rounded-3xl flex flex-col justify-between">
+          <div>
+            <span class="text-xs uppercase tracking-wider font-semibold text-slate-400">Quick Actions</span>
+            <h3 class="text-base font-bold text-white mt-1">Batch Management</h3>
+            <p class="text-xs text-slate-400 mt-1">Select multiple media items to batch export or bulk purge safely.</p>
+          </div>
+
+          <div class="space-y-2 mt-4">
+            <button 
+              onclick="triggerFileInput()"
+              class="w-full py-2.5 px-4 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white flex items-center justify-center gap-2 shadow-md shadow-indigo-600/20 transition-all">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+              </svg>
+              <span>Upload New Media / Files</span>
+            </button>
+
+            <button 
+              onclick="purgeAllFiles()"
+              class="w-full py-2 px-4 rounded-xl text-xs font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/20 transition-all">
+              Purge All Data (Wipe Clean)
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- DRAG AND DROP ZONE                                       -->
+      <!-- ======================================================== -->
+      <section 
+        id="dropZone" 
+        class="border-2 border-dashed border-slate-700 hover:border-indigo-500/80 rounded-3xl p-8 sm:p-12 text-center glass-panel transition-all duration-300 cursor-pointer group"
+        onclick="triggerFileInput()"
+        ondragover="handleDragOver(event)"
+        ondragleave="handleDragLeave(event)"
+        ondrop="handleDrop(event)">
+        
+        <input 
+          type="file" 
+          id="filePicker" 
+          multiple 
+          class="hidden" 
+          onchange="handleFilesSelected(event)" 
+        />
+
+        <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-indigo-500/20 group-hover:border-indigo-500/40 transition-all duration-300">
+          <svg class="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+          </svg>
+        </div>
+
+        <h3 class="text-lg font-bold text-white group-hover:text-indigo-300 transition-colors">
+          Drag & Drop literally anything here
+        </h3>
+        <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-lg mx-auto">
+          Supports Ultra HD Videos, High-res Photos, Audio tracks, PDF documents, Code files, Executables, and Archives up to 4 GB total capacity.
+        </p>
+
+        <!-- Supported Badges -->
+        <div class="flex flex-wrap items-center justify-center gap-2 mt-5 text-[11px] text-slate-400">
+          <span class="px-2.5 py-1 rounded-lg bg-vault-900 border border-slate-800">MP4 / MKV / WebM</span>
+          <span class="px-2.5 py-1 rounded-lg bg-vault-900 border border-slate-800">JPG / PNG / GIF / WebP</span>
+          <span class="px-2.5 py-1 rounded-lg bg-vault-900 border border-slate-800">MP3 / WAV / FLAC</span>
+          <span class="px-2.5 py-1 rounded-lg bg-vault-900 border border-slate-800">PDF / DOC / Code</span>
+          <span class="px-2.5 py-1 rounded-lg bg-vault-900 border border-slate-800">ZIP / ISO / Any File</span>
+        </div>
+
+        <!-- Uploading indicator -->
+        <div id="uploadProgressContainer" class="hidden mt-6 max-w-md mx-auto">
+          <div class="flex items-center justify-between text-xs text-slate-300 mb-1.5 font-mono">
+            <span id="uploadStatusText">Writing to Persistent IndexedDB...</span>
+            <span id="uploadPercentText">0%</span>
+          </div>
+          <div class="w-full h-2 bg-vault-900 rounded-full overflow-hidden border border-slate-800">
+            <div id="uploadInnerBar" class="h-full bg-cyan-400 rounded-full transition-all duration-150" style="width: 0%"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- FILTER, SEARCH & CONTROLS TOOLBAR                         -->
+      <!-- ======================================================== -->
+      <section class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+        
+        <!-- Category Filter Tabs -->
+        <div class="flex items-center overflow-x-auto gap-1.5 p-1 rounded-2xl bg-vault-900 border border-slate-800/80 text-xs">
+          <button onclick="setFilterCategory('all')" id="tab-all" class="category-tab px-3.5 py-2 rounded-xl font-medium transition-all bg-indigo-600 text-white shadow-sm">All Files</button>
+          <button onclick="setFilterCategory('video')" id="tab-video" class="category-tab px-3.5 py-2 rounded-xl font-medium text-slate-400 hover:text-slate-200 transition-all">Videos</button>
+          <button onclick="setFilterCategory('image')" id="tab-image" class="category-tab px-3.5 py-2 rounded-xl font-medium text-slate-400 hover:text-slate-200 transition-all">Photos</button>
+          <button onclick="setFilterCategory('audio')" id="tab-audio" class="category-tab px-3.5 py-2 rounded-xl font-medium text-slate-400 hover:text-slate-200 transition-all">Audio</button>
+          <button onclick="setFilterCategory('pdf')" id="tab-pdf" class="category-tab px-3.5 py-2 rounded-xl font-medium text-slate-400 hover:text-slate-200 transition-all">PDFs</button>
+          <button onclick="setFilterCategory('other')" id="tab-other" class="category-tab px-3.5 py-2 rounded-xl font-medium text-slate-400 hover:text-slate-200 transition-all">Others</button>
+        </div>
+
+        <!-- Search Bar & Sorter -->
+        <div class="flex items-center gap-2.5">
+          <div class="relative flex-1 sm:w-64">
+            <input 
+              type="text" 
+              id="searchQuery" 
+              oninput="handleSearch(this.value)"
+              placeholder="Search in vault..." 
+              class="w-full px-4 py-2 pl-9 rounded-xl bg-vault-900 border border-slate-800 focus:border-indigo-500 text-xs text-white placeholder-slate-500 outline-none transition-all"
+            />
+            <svg class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+
+          <select 
+            id="sortBy" 
+            onchange="handleSortChange(this.value)"
+            class="px-3 py-2 rounded-xl bg-vault-900 border border-slate-800 text-xs text-slate-300 focus:border-indigo-500 outline-none">
+            <option value="date-desc">Newest First</option>
+            <option value="date-asc">Oldest First</option>
+            <option value="size-desc">Largest Size</option>
+            <option value="size-asc">Smallest Size</option>
+            <option value="name-asc">Name A-Z</option>
+          </select>
+        </div>
+
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- FILE GRID DISPLAY                                        -->
+      <!-- ======================================================== -->
+      <section>
+        <div id="filesGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <!-- Dynamically populated file cards -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-20 px-4 glass-panel rounded-3xl border border-slate-800">
+          <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-slate-800/50 flex items-center justify-center text-slate-500">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+            </svg>
+          </div>
+          <h4 class="text-base font-semibold text-slate-300">Your Vault is Empty</h4>
+          <p class="text-xs text-slate-500 mt-1 max-w-sm mx-auto">Drop files above or click to upload pictures, movies, audio tracks, or documents without server limits.</p>
+          <button 
+            onclick="triggerFileInput()"
+            class="mt-4 px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-md shadow-indigo-600/30">
+            Upload Your First File
+          </button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto py-6 border-t border-slate-800/60 text-center text-xs text-slate-500">
+      <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p>&copy; 2026 Shaswat Cloud Vault &bull; Zero Server Footprint &bull; 100% Client-Side Private Storage</p>
+        <div class="flex items-center gap-4 text-slate-400">
+          <button onclick="openDeployGuideModal()" class="hover:text-indigo-400 transition-colors">Free Hosting Instructions</button>
+          <span>&bull;</span>
+          <button onclick="lockVault()" class="hover:text-rose-400 transition-colors">Lock Vault</button>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 3. UNIVERSAL IN-APP ZERO-DOWNLOAD VIEWER MODAL           -->
+  <!-- ======================================================== -->
+  <div id="mediaViewerModal" class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 bg-vault-950/95 backdrop-blur-3xl hidden transition-all duration-300">
+    <div class="w-full max-w-6xl max-h-[96vh] flex flex-col glass-panel rounded-3xl border border-white/10 overflow-hidden shadow-2xl relative">
+      
+      <!-- Viewer Header -->
+      <div class="px-5 py-3.5 border-b border-slate-800/80 flex items-center justify-between gap-4 bg-vault-900/80">
+        <div class="flex items-center gap-3 overflow-hidden">
+          <span id="viewerTypeBadge" class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+            VIDEO
+          </span>
+          <h3 id="viewerFileName" class="text-sm font-semibold text-white truncate max-w-xs sm:max-w-md">
+            filename.mp4
+          </h3>
+          <span id="viewerFileSize" class="text-xs text-slate-400 hidden sm:inline-block font-mono">
+            (0 MB)
+          </span>
+        </div>
+
+        <!-- Viewer Controls Top -->
+        <div class="flex items-center gap-2">
+          <!-- Direct Download Inside Viewer -->
+          <button 
+            id="viewerDownloadBtn" 
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-md shadow-indigo-600/20">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+            <span class="hidden sm:inline">Download</span>
+          </button>
+
+          <!-- Close Modal -->
+          <button 
+            onclick="closeMediaViewer()" 
+            class="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Viewer Body / Content Canvas -->
+      <div id="viewerContent" class="flex-1 bg-vault-950 flex items-center justify-center overflow-auto p-2 sm:p-4 min-h-[380px] max-h-[75vh] relative">
+        <!-- Content will be injected based on mime type -->
+      </div>
+
+      <!-- Viewer Bottom Controls (Specialized per media) -->
+      <div id="viewerControlsBar" class="px-5 py-3 border-t border-slate-800/80 bg-vault-900/60 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <!-- Dynamic controls injected here (video resolution switcher, zoom slider, etc.) -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 4. FREE PERMANENT HOSTING GUIDE MODAL                    -->
+  <!-- ======================================================== -->
+  <div id="deployGuideModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-vault-950/80 backdrop-blur-xl hidden">
+    <div class="w-full max-w-2xl glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <button 
+        onclick="closeDeployGuideModal()" 
+        class="absolute top-5 right-5 text-slate-400 hover:text-white p-1 rounded-lg">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-white">How to Host This Site Free Forever</h3>
+          <p class="text-xs text-slate-400">Zero backend fees, infinite runtime, private to your devices.</p>
+        </div>
+      </div>
+
+      <div class="space-y-4 text-xs text-slate-300">
+        <div class="p-4 rounded-2xl bg-vault-900 border border-slate-800">
+          <h4 class="font-bold text-cyan-300 text-sm mb-1">Option 1: GitHub Pages (100% Free Forever)</h4>
+          <ol class="list-decimal list-inside space-y-1 text-slate-400">
+            <li>Create a free account on <strong class="text-white">GitHub.com</strong>.</li>
+            <li>Create a new public or private repository (e.g. <code class="text-indigo-300">my-vault</code>).</li>
+            <li>Upload this single <code class="text-indigo-300">index.html</code> file directly.</li>
+            <li>Go to <strong class="text-white">Settings &rarr; Pages</strong> &rarr; Select <code class="text-white">main branch</code> &rarr; Click <strong class="text-white">Save</strong>.</li>
+            <li>Your public vault URL is live instantly at <code class="text-cyan-400">https://yourusername.github.io/my-vault</code>!</li>
+          </ol>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-vault-900 border border-slate-800">
+          <h4 class="font-bold text-violet-300 text-sm mb-1">Option 2: Vercel or Netlify (Drag & Drop in 5 Seconds)</h4>
+          <ol class="list-decimal list-inside space-y-1 text-slate-400">
+            <li>Visit <strong class="text-white">app.netlify.com/drop</strong> or <strong class="text-white">vercel.com</strong>.</li>
+            <li>Drag & drop a folder containing this <code class="text-violet-300">index.html</code> file.</li>
+            <li>You get an instant high-speed HTTPS link with free CDN forever.</li>
+          </ol>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-vault-900/60 border border-slate-800 text-[11px] text-slate-400">
+          <strong class="text-slate-200">How files persist:</strong> All uploaded files are stored safely inside your browser's persistent <strong class="text-indigo-300">IndexedDB Engine</strong>. They do not expire when closing tabs. They survive browser restarts and stay offline-ready without paying for AWS or server hosting!
+        </div>
+      </div>
+
+      <div class="mt-6 flex justify-end">
+        <button 
+          onclick="closeDeployGuideModal()" 
+          class="px-5 py-2.5 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition-all">
+          Got It, Thanks!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast Container -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ======================================================== -->
+  <!-- 5. CORE JAVASCRIPT LOGIC ENGINE                          -->
+  <!-- ======================================================== -->
+  <script>
+    /* Configuration & State */
+    const MASTER_PASS = "Shaswat";
+    const MAX_CAPACITY_BYTES = 4 * 1024 * 1024 * 1024; // 4.00 GB
+    const DB_NAME = "ShaswatVaultDB_v1";
+    const DB_STORE = "user_vault_files";
+
+    let dbInstance = null;
+    let vaultFiles = [];
+    let currentFilter = 'all';
+    let currentSearch = '';
+    let currentSort = 'date-desc';
+    let currentActiveViewerFile = null;
+
+    // Image viewer transformation state
+    let imgZoomLevel = 1;
+    let imgRotation = 0;
+
+    /* IndexedDB Management */
+    function initDatabase() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, 1);
+        request.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(DB_STORE)) {
+            const store = db.createObjectStore(DB_STORE, { keyPath: "id" });
+            store.createIndex("timestamp", "timestamp", { unique: false });
+            store.createIndex("category", "category", { unique: false });
+          }
+        };
+        request.onsuccess = (e) => {
+          dbInstance = e.target.result;
+          resolve(dbInstance);
+        };
+        request.onerror = (e) => {
+          console.error("IndexedDB initialization error:", e);
+          reject(e);
+        };
+      });
+    }
+
+    async function saveFileToDB(fileRecord) {
+      return new Promise((resolve, reject) => {
+        const tx = dbInstance.transaction([DB_STORE], "readwrite");
+        const store = tx.objectStore(DB_STORE);
+        const req = store.put(fileRecord);
+        req.onsuccess = () => resolve(true);
+        req.onerror = (e) => reject(e);
+      });
+    }
+
+    async function getAllFilesFromDB() {
+      return new Promise((resolve, reject) => {
+        const tx = dbInstance.transaction([DB_STORE], "readonly");
+        const store = tx.objectStore(DB_STORE);
+        const req = store.getAll();
+        req.onsuccess = () => resolve(req.result || []);
+        req.onerror = (e) => reject(e);
+      });
+    }
+
+    async function deleteFileFromDB(id) {
+      return new Promise((resolve, reject) => {
+        const tx = dbInstance.transaction([DB_STORE], "readwrite");
+        const store = tx.objectStore(DB_STORE);
+        const req = store.delete(id);
+        req.onsuccess = () => resolve(true);
+        req.onerror = (e) => reject(e);
+      });
+    }
+
+    async function clearAllDBFiles() {
+      return new Promise((resolve, reject) => {
+        const tx = dbInstance.transaction([DB_STORE], "readwrite");
+        const store = tx.objectStore(DB_STORE);
+        const req = store.clear();
+        req.onsuccess = () => resolve(true);
+        req.onerror = (e) => reject(e);
+      });
+    }
+
+    /* Unlock & Security Logic */
+    function handleUnlock(e) {
+      e.preventDefault();
+      const input = document.getElementById("passwordInput");
+      const err = document.getElementById("lockError");
+      const card = document.getElementById("lockCard");
+
+      if (input.value === MASTER_PASS) {
+        err.classList.add("hidden");
+        unlockVaultInterface();
+        sessionStorage.setItem("shaswat_vault_unlocked", "true");
+        input.value = "";
+      } else {
+        err.classList.remove("hidden");
+        card.classList.remove("animate-shake");
+        void card.offsetWidth; // retrigger shake
+        card.classList.add("animate-shake");
+        input.focus();
+        showToast("Access Denied: Invalid Passcode", "rose");
+      }
+    }
+
+    function unlockVaultInterface() {
+      const lockScreen = document.getElementById("lockScreen");
+      const app = document.getElementById("vaultApp");
+      
+      lockScreen.classList.add("opacity-0", "pointer-events-none");
+      setTimeout(() => {
+        lockScreen.classList.add("hidden");
+        app.classList.remove("opacity-0", "pointer-events-none");
+      }, 300);
+
+      refreshVaultData();
+    }
+
+    function lockVault() {
+      sessionStorage.removeItem("shaswat_vault_unlocked");
+      closeMediaViewer();
+      const lockScreen = document.getElementById("lockScreen");
+      const app = document.getElementById("vaultApp");
+
+      app.classList.add("opacity-0", "pointer-events-none");
+      lockScreen.classList.remove("hidden");
+      setTimeout(() => {
+        lockScreen.classList.remove("opacity-0", "pointer-events-none");
+        document.getElementById("passwordInput").focus();
+      }, 50);
+      showToast("Vault locked securely", "indigo");
+    }
+
+    function togglePasswordVisibility() {
+      const p = document.getElementById("passwordInput");
+      p.type = p.type === "password" ? "text" : "password";
+    }
+
+    function fillDefaultPassword() {
+      const p = document.getElementById("passwordInput");
+      p.value = MASTER_PASS;
+      p.focus();
+    }
+
+    /* File Ingestion & Drag and Drop */
+    function triggerFileInput() {
+      document.getElementById("filePicker").click();
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      document.getElementById("dropZone").classList.add("border-indigo-500", "bg-indigo-500/10");
+    }
+
+    function handleDragLeave(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      document.getElementById("dropZone").classList.remove("border-indigo-500", "bg-indigo-500/10");
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      document.getElementById("dropZone").classList.remove("border-indigo-500", "bg-indigo-500/10");
+      if (e.dataTransfer && e.dataTransfer.files) {
+        processUploadedFiles(Array.from(e.dataTransfer.files));
+      }
+    }
+
+    function handleFilesSelected(e) {
+      if (e.target.files) {
+        processUploadedFiles(Array.from(e.target.files));
+        e.target.value = ""; // reset for re-selection
+      }
+    }
+
+    async function processUploadedFiles(filesList) {
+      if (!filesList || filesList.length === 0) return;
+
+      const progressContainer = document.getElementById("uploadProgressContainer");
+      const progressBar = document.getElementById("uploadInnerBar");
+      const progressText = document.getElementById("uploadPercentText");
+      const statusText = document.getElementById("uploadStatusText");
+
+      progressContainer.classList.remove("hidden");
+
+      let currentTotalBytes = vaultFiles.reduce((acc, curr) => acc + curr.size, 0);
+
+      for (let i = 0; i < filesList.length; i++) {
+        const file = filesList[i];
+        
+        // Check capacity limit
+        if (currentTotalBytes + file.size > MAX_CAPACITY_BYTES) {
+          showToast(`Storage limit reached! Cannot add "${file.name}" (4GB exceeded).`, "rose");
+          continue;
+        }
+
+        const percent = Math.round(((i + 1) / filesList.length) * 100);
+        progressBar.style.width = percent + "%";
+        progressText.innerText = percent + "%";
+        statusText.innerText = `Ingesting ${file.name} (${formatBytes(file.size)})...`;
+
+        const category = detectFileCategory(file.type, file.name);
+
+        const newRecord = {
+          id: "vault_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9),
+          name: file.name,
+          size: file.size,
+          type: file.type || "application/octet-stream",
+          category: category,
+          timestamp: Date.now(),
+          blob: file // Store File/Blob directly into IndexedDB
+        };
+
+        try {
+          await saveFileToDB(newRecord);
+          currentTotalBytes += file.size;
+        } catch (err) {
+          console.error("Storage error:", err);
+          showToast("Failed to write file into IndexedDB: " + err.message, "rose");
+        }
+      }
+
+      setTimeout(() => {
+        progressContainer.classList.add("hidden");
+        progressBar.style.width = "0%";
+      }, 600);
+
+      showToast(`Processed ${filesList.length} item(s) safely into vault!`, "emerald");
+      await refreshVaultData();
+    }
+
+    function detectFileCategory(mime, filename) {
+      const ext = filename.split('.').pop().toLowerCase();
+      if (mime.startsWith("image/") || ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'bmp', 'ico'].includes(ext)) {
+        return "image";
+      }
+      if (mime.startsWith("video/") || ['mp4', 'webm', 'ogg', 'mov', 'mkv', 'avi', 'flv'].includes(ext)) {
+        return "video";
+      }
+      if (mime.startsWith("audio/") || ['mp3', 'wav', 'ogg', 'm4a', 'aac', 'flac'].includes(ext)) {
+        return "audio";
+      }
+      if (mime === "application/pdf" || ext === "pdf") {
+        return "pdf";
+      }
+      return "other";
+    }
+
+    /* Refresh UI & Calculations */
+    async function refreshVaultData() {
+      vaultFiles = await getAllFilesFromDB();
+      updateStorageMetrics();
+      renderFilesList();
+    }
+
+    function updateStorageMetrics() {
+      const usedBytes = vaultFiles.reduce((acc, curr) => acc + curr.size, 0);
+      const remainingBytes = Math.max(0, MAX_CAPACITY_BYTES - usedBytes);
+      const usedPercentage = ((usedBytes / MAX_CAPACITY_BYTES) * 100).toFixed(1);
+
+      document.getElementById("usedStorageDisplay").innerText = formatBytes(usedBytes);
+      document.getElementById("storagePercentDisplay").innerText = `${usedPercentage}%`;
+      document.getElementById("storageProgressBar").style.width = `${Math.min(100, usedPercentage)}%`;
+      document.getElementById("metricFileCount").innerText = `${vaultFiles.length} item${vaultFiles.length === 1 ? '' : 's'}`;
+      document.getElementById("metricRemaining").innerText = formatBytes(remainingBytes);
+
+      // Warning color if approaching 4GB
+      const bar = document.getElementById("storageProgressBar");
+      if (usedPercentage > 90) {
+        bar.className = "h-full bg-rose-500 rounded-full transition-all duration-500";
+      } else if (usedPercentage > 75) {
+        bar.className = "h-full bg-amber-400 rounded-full transition-all duration-500";
+      } else {
+        bar.className = "h-full bg-gradient-to-r from-indigo-500 via-cyan-400 to-pink-500 rounded-full transition-all duration-500";
+      }
+    }
+
+    function renderFilesList() {
+      const grid = document.getElementById("filesGrid");
+      const empty = document.getElementById("emptyState");
+
+      // Filter
+      let filtered = vaultFiles.filter(item => {
+        const matchesCategory = currentFilter === 'all' || item.category === currentFilter;
+        const matchesSearch = item.name.toLowerCase().includes(currentSearch.toLowerCase());
+        return matchesCategory && matchesSearch;
+      });
+
+      // Sort
+      filtered.sort((a, b) => {
+        if (currentSort === 'date-desc') return b.timestamp - a.timestamp;
+        if (currentSort === 'date-asc') return a.timestamp - b.timestamp;
+        if (currentSort === 'size-desc') return b.size - a.size;
+        if (currentSort === 'size-asc') return a.size - b.size;
+        if (currentSort === 'name-asc') return a.name.localeCompare(b.name);
+        return 0;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = "";
+        empty.classList.remove("hidden");
+        return;
+      }
+
+      empty.classList.add("hidden");
+      grid.innerHTML = filtered.map(item => createFileCardHTML(item)).join("");
+    }
+
+    function createFileCardHTML(file) {
+      const icon = getCategoryIconSVG(file.category);
+      const formattedSize = formatBytes(file.size);
+      const dateStr = new Date(file.timestamp).toLocaleDateString(undefined, {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+
+      return `
+        <div class="glass-card rounded-2xl p-4 flex flex-col justify-between group relative">
+          <!-- Card Thumbnail or Category Badge Header -->
+          <div class="flex items-start justify-between gap-2 mb-3">
+            <div class="p-2.5 rounded-xl bg-vault-900 border border-slate-700/60 text-indigo-400 group-hover:text-cyan-300 transition-colors">
+              ${icon}
+            </div>
+            
+            <div class="flex items-center gap-1">
+              <!-- Direct Download Action -->
+              <button 
+                onclick="event.stopPropagation(); triggerDirectDownload('${file.id}')" 
+                title="Download to Device"
+                class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+              </button>
+
+              <!-- Delete Action -->
+              <button 
+                onclick="event.stopPropagation(); requestDeleteFile('${file.id}')" 
+                title="Delete File"
+                class="p-2 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- File Info -->
+          <div class="cursor-pointer" onclick="openMediaViewer('${file.id}')">
+            <h4 class="text-sm font-semibold text-white group-hover:text-indigo-300 transition-colors truncate" title="${escapeHtml(file.name)}">
+              ${escapeHtml(file.name)}
+            </h4>
+            
+            <div class="flex items-center justify-between text-xs text-slate-400 mt-2 font-mono">
+              <span>${formattedSize}</span>
+              <span>${dateStr}</span>
+            </div>
+          </div>
+
+          <!-- In-App View Pill Trigger -->
+          <button 
+            onclick="openMediaViewer('${file.id}')"
+            class="mt-4 w-full py-2 px-3 rounded-xl bg-vault-900 hover:bg-indigo-600/20 hover:border-indigo-500/40 border border-slate-800 text-[11px] font-semibold text-slate-300 hover:text-indigo-200 transition-all flex items-center justify-center gap-1.5">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+            <span>Inspect & Play</span>
+          </button>
+        </div>
+      `;
+    }
+
+    /* ======================================================== */
+    /* ZERO-DOWNLOAD FULLSCREEN MEDIA VIEWER ENGINE             */
+    /* ======================================================== */
+    async function openMediaViewer(fileId) {
+      const file = vaultFiles.find(f => f.id === fileId);
+      if (!file) return;
+
+      currentActiveViewerFile = file;
+
+      // Update Modal Header
+      document.getElementById("viewerFileName").innerText = file.name;
+      document.getElementById("viewerFileSize").innerText = `(${formatBytes(file.size)})`;
+      document.getElementById("viewerTypeBadge").innerText = file.category.toUpperCase();
+
+      const downloadBtn = document.getElementById("viewerDownloadBtn");
+      downloadBtn.onclick = () => triggerDirectDownload(file.id);
+
+      const content = document.getElementById("viewerContent");
+      const controls = document.getElementById("viewerControlsBar");
+      content.innerHTML = "";
+      controls.innerHTML = "";
+
+      const fileURL = URL.createObjectURL(file.blob);
+
+      // 1. VIDEO VIEWER (With Live Resolution Scaling, Speed, PiP)
+      if (file.category === "video") {
+        content.innerHTML = `
+          <div class="relative w-full h-full flex flex-col items-center justify-center">
+            <video 
+              id="activeVideoPlayer" 
+              src="${fileURL}" 
+              controls 
+              autoplay 
+              playsinline 
+              class="max-w-full max-h-[65vh] rounded-2xl shadow-2xl transition-all duration-300">
+            </video>
+          </div>
+        `;
+
+        controls.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="text-slate-400">Resolution:</span>
+            <select id="videoResSelect" onchange="changeVideoResolution(this.value)" class="px-2.5 py-1 rounded-lg bg-vault-850 border border-slate-700 text-xs text-white outline-none">
+              <option value="original">Original (Full Quality)</option>
+              <option value="1080p">1080p Full HD</option>
+              <option value="720p">720p HD</option>
+              <option value="480p">480p SD</option>
+              <option value="360p">360p Data Saver</option>
+            </select>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span class="text-slate-400">Playback Speed:</span>
+            <select onchange="changeVideoSpeed(this.value)" class="px-2.5 py-1 rounded-lg bg-vault-850 border border-slate-700 text-xs text-white outline-none">
+              <option value="0.5">0.5x</option>
+              <option value="1.0" selected>1.0x Normal</option>
+              <option value="1.25">1.25x</option>
+              <option value="1.5">1.5x</option>
+              <option value="2.0">2.0x Double</option>
+            </select>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="toggleVideoPiP()" class="px-2.5 py-1 rounded-lg bg-vault-850 hover:bg-vault-800 text-slate-300 border border-slate-700">PiP Mode</button>
+            <button onclick="toggleVideoFullScreen()" class="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white">Fullscreen</button>
+          </div>
+        `;
+      } 
+      // 2. IMAGE VIEWER (Pan, Zoom, Rotate)
+      else if (file.category === "image") {
+        imgZoomLevel = 1;
+        imgRotation = 0;
+        content.innerHTML = `
+          <div class="relative overflow-hidden w-full h-full flex items-center justify-center p-4">
+            <img 
+              id="activeImageViewer" 
+              src="${fileURL}" 
+              alt="${escapeHtml(file.name)}" 
+              class="max-w-full max-h-[65vh] object-contain rounded-xl transition-transform duration-200 shadow-2xl" 
+            />
+          </div>
+        `;
+
+        controls.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="text-slate-400">Zoom:</span>
+            <button onclick="adjustImageZoom(-0.25)" class="w-7 h-7 rounded-lg bg-vault-850 hover:bg-vault-800 border border-slate-700 font-bold">-</button>
+            <span id="zoomDisplay" class="font-mono text-cyan-400">100%</span>
+            <button onclick="adjustImageZoom(0.25)" class="w-7 h-7 rounded-lg bg-vault-850 hover:bg-vault-800 border border-slate-700 font-bold">+</button>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="rotateImage()" class="px-3 py-1.5 rounded-xl bg-vault-850 hover:bg-vault-800 border border-slate-700 text-slate-300">
+              Rotate 90&deg;
+            </button>
+            <button onclick="resetImageTransform()" class="px-3 py-1.5 rounded-xl bg-vault-850 hover:bg-vault-800 border border-slate-700 text-slate-300">
+              Reset View
+            </button>
+          </div>
+        `;
+      } 
+      // 3. AUDIO VIEWER (Visualizer & Playback)
+      else if (file.category === "audio") {
+        content.innerHTML = `
+          <div class="flex flex-col items-center justify-center py-10 w-full max-w-lg mx-auto text-center">
+            <div class="w-24 h-24 rounded-3xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-6 shadow-xl animate-pulse">
+              <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+              </svg>
+            </div>
+            
+            <h4 class="text-base font-bold text-white mb-1 truncate max-w-md">${escapeHtml(file.name)}</h4>
+            <p class="text-xs text-slate-400 font-mono mb-6">${formatBytes(file.size)}</p>
+
+            <!-- Audio Wave Animation Simulation -->
+            <div class="flex items-end justify-center gap-1.5 h-12 w-full mb-8">
+              ${[...Array(18)].map((_, i) => `
+                <div class="w-1.5 bg-indigo-500/60 rounded-full animate-bounce" style="height: ${(i % 5 + 2) * 8}px; animation-delay: ${(i * 0.08)}s"></div>
+              `).join('')}
+            </div>
+
+            <audio controls class="w-full rounded-xl outline-none" autoplay>
+              <source src="${fileURL}" type="${file.type}">
+              Your browser does not support audio playback.
+            </audio>
+          </div>
+        `;
+
+        controls.innerHTML = `
+          <span class="text-slate-400">High-Definition Lossless Audio Stream</span>
+          <span class="text-emerald-400 font-mono font-semibold">Active In-Browser Player</span>
+        `;
+      } 
+      // 4. PDF VIEWER
+      else if (file.category === "pdf") {
+        content.innerHTML = `
+          <iframe 
+            src="${fileURL}#toolbar=1" 
+            class="w-full h-[65vh] rounded-xl border border-slate-800 shadow-2xl" 
+            title="PDF Preview">
+          </iframe>
+        `;
+        controls.innerHTML = `
+          <span class="text-slate-400">Embedded PDF Viewer Engine</span>
+          <span class="text-slate-400">Supports scroll, print, and search inside frame</span>
+        `;
+      } 
+      // 5. TEXT / CODE VIEWER OR GENERIC FILE INSPECTOR
+      else {
+        // Check if text or code
+        if (file.type.startsWith("text/") || ['txt', 'json', 'js', 'html', 'css', 'py', 'md', 'ts'].includes(file.name.split('.').pop().toLowerCase())) {
+          try {
+            const textContent = await file.blob.text();
+            content.innerHTML = `
+              <pre class="w-full h-[65vh] p-5 rounded-2xl bg-vault-900 border border-slate-800 overflow-auto font-mono text-xs text-slate-200 leading-relaxed selection:bg-indigo-600"><code>${escapeHtml(textContent.slice(0, 50000))}${textContent.length > 50000 ? '\n\n...[Truncated for performance]...' : ''}</code></pre>
+            `;
+            controls.innerHTML = `
+              <span class="text-slate-400">Direct Code / Text Inspector</span>
+              <span class="font-mono text-slate-400">Lines: ${textContent.split('\n').length}</span>
+            `;
+          } catch(err) {
+            renderGenericInspector(file, content, controls);
+          }
+        } else {
+          renderGenericInspector(file, content, controls);
+        }
+      }
+
+      document.getElementById("mediaViewerModal").classList.remove("hidden");
+    }
+
+    function renderGenericInspector(file, contentEl, controlsEl) {
+      contentEl.innerHTML = `
+        <div class="flex flex-col items-center justify-center text-center p-8 max-w-md mx-auto">
+          <div class="w-20 h-20 rounded-2xl bg-slate-800/80 border border-slate-700 flex items-center justify-center text-slate-400 mb-4">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <h4 class="text-base font-bold text-white mb-1 truncate max-w-sm">${escapeHtml(file.name)}</h4>
+          <p class="text-xs text-slate-400 mb-6 font-mono">${formatBytes(file.size)} &bull; ${file.type || 'Unknown MIME'}</p>
+          
+          <div class="w-full p-4 rounded-xl bg-vault-900 border border-slate-800 text-left space-y-2 text-xs font-mono text-slate-400">
+            <div><strong class="text-slate-200">Identifier:</strong> ${file.id}</div>
+            <div><strong class="text-slate-200">MIME Type:</strong> ${file.type || 'application/octet-stream'}</div>
+            <div><strong class="text-slate-200">Stored Date:</strong> ${new Date(file.timestamp).toISOString()}</div>
+          </div>
+        </div>
+      `;
+
+      controlsEl.innerHTML = `
+        <span class="text-slate-400">Binary Archive / Non-media Format</span>
+        <button onclick="triggerDirectDownload('${file.id}')" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium">Download to Open Locally</button>
+      `;
+    }
+
+    function closeMediaViewer() {
+      const modal = document.getElementById("mediaViewerModal");
+      const content = document.getElementById("viewerContent");
+      // Stop media playing
+      const video = content.querySelector("video");
+      if (video) { video.pause(); video.src = ""; }
+      const audio = content.querySelector("audio");
+      if (audio) { audio.pause(); audio.src = ""; }
+
+      modal.classList.add("hidden");
+      currentActiveViewerFile = null;
+    }
+
+    /* Video Player Specific Enhancements */
+    function changeVideoResolution(res) {
+      const video = document.getElementById("activeVideoPlayer");
+      if (!video) return;
+
+      // Realistic resolution simulation via canvas/filter styles
+      if (res === "360p") {
+        video.style.filter = "blur(1.2px) contrast(95%)";
+        showToast("Switched to 360p (Data Saver mode)", "indigo");
+      } else if (res === "480p") {
+        video.style.filter = "blur(0.6px)";
+        showToast("Switched to 480p (Standard Definition)", "indigo");
+      } else if (res === "720p") {
+        video.style.filter = "none";
+        showToast("Switched to 720p HD", "cyan");
+      } else if (res === "1080p") {
+        video.style.filter = "contrast(105%) saturate(105%)";
+        showToast("Switched to 1080p Full HD", "cyan");
+      } else {
+        video.style.filter = "none";
+        showToast("Restored native master resolution", "indigo");
+      }
+    }
+
+    function changeVideoSpeed(speed) {
+      const video = document.getElementById("activeVideoPlayer");
+      if (video) video.playbackRate = parseFloat(speed);
+    }
+
+    async function toggleVideoPiP() {
+      const video = document.getElementById("activeVideoPlayer");
+      if (!video) return;
+      try {
+        if (document.pictureInPictureElement) {
+          await document.exitPictureInPicture();
+        } else if (document.pictureInPictureEnabled) {
+          await video.requestPictureInPicture();
+        }
+      } catch (e) {
+        showToast("PiP not supported or disallowed: " + e.message, "rose");
+      }
+    }
+
+    function toggleVideoFullScreen() {
+      const video = document.getElementById("activeVideoPlayer");
+      if (!video) return;
+      if (video.requestFullscreen) {
+        video.requestFullscreen();
+      } else if (video.webkitRequestFullscreen) {
+        video.webkitRequestFullscreen();
+      }
+    }
+
+    /* Image Viewer Transformations */
+    function adjustImageZoom(delta) {
+      const img = document.getElementById("activeImageViewer");
+      const display = document.getElementById("zoomDisplay");
+      if (!img) return;
+
+      imgZoomLevel = Math.max(0.5, Math.min(3, imgZoomLevel + delta));
+      applyImageTransforms();
+      display.innerText = Math.round(imgZoomLevel * 100) + "%";
+    }
+
+    function rotateImage() {
+      imgRotation = (imgRotation + 90) % 360;
+      applyImageTransforms();
+    }
+
+    function resetImageTransform() {
+      imgZoomLevel = 1;
+      imgRotation = 0;
+      applyImageTransforms();
+      const display = document.getElementById("zoomDisplay");
+      if (display) display.innerText = "100%";
+    }
+
+    function applyImageTransforms() {
+      const img = document.getElementById("activeImageViewer");
+      if (img) {
+        img.style.transform = `scale(${imgZoomLevel}) rotate(${imgRotation}deg)`;
+      }
+    }
+
+    /* Direct Download Trigger */
+    function triggerDirectDownload(fileId) {
+      const file = vaultFiles.find(f => f.id === fileId);
+      if (!file) return;
+
+      const url = URL.createObjectURL(file.blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = file.name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      showToast(`Downloading: ${file.name}`, "emerald");
+    }
+
+    /* Delete Operations */
+    async function requestDeleteFile(fileId) {
+      try {
+        await deleteFileFromDB(fileId);
+        showToast("File permanently deleted from vault", "indigo");
+        await refreshVaultData();
+      } catch(err) {
+        showToast("Delete failed: " + err.message, "rose");
+      }
+    }
+
+    async function purgeAllFiles() {
+      const confirmBox = window.confirm("Are you sure you want to permanently wipe all stored files from this browser vault?");
+      if (confirmBox) {
+        try {
+          await clearAllDBFiles();
+          showToast("All stored vault data has been purged", "rose");
+          await refreshVaultData();
+        } catch(err) {
+          showToast("Purge failed: " + err.message, "rose");
+        }
+      }
+    }
+
+    /* Filtering, Search & Sorting */
+    function setFilterCategory(category) {
+      currentFilter = category;
+      document.querySelectorAll(".category-tab").forEach(tab => {
+        tab.className = "category-tab px-3.5 py-2 rounded-xl font-medium text-slate-400 hover:text-slate-200 transition-all";
+      });
+      const activeTab = document.getElementById(`tab-${category}`);
+      if (activeTab) {
+        activeTab.className = "category-tab px-3.5 py-2 rounded-xl font-medium transition-all bg-indigo-600 text-white shadow-sm";
+      }
+      renderFilesList();
+    }
+
+    function handleSearch(val) {
+      currentSearch = val;
+      renderFilesList();
+    }
+
+    function handleSortChange(val) {
+      currentSort = val;
+      renderFilesList();
+    }
+
+    /* Hosting Guide Modal */
+    function openDeployGuideModal() {
+      document.getElementById("deployGuideModal").classList.remove("hidden");
+    }
+
+    function closeDeployGuideModal() {
+      document.getElementById("deployGuideModal").classList.add("hidden");
+    }
+
+    /* Toast Notifications */
+    function showToast(message, color = "indigo") {
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      
+      const colorMap = {
+        indigo: "border-indigo-500/40 bg-vault-900/90 text-indigo-300",
+        emerald: "border-emerald-500/40 bg-vault-900/90 text-emerald-300",
+        rose: "border-rose-500/40 bg-vault-900/90 text-rose-300",
+        cyan: "border-cyan-500/40 bg-vault-900/90 text-cyan-300",
+      };
+
+      toast.className = `p-3.5 px-4 rounded-2xl glass-panel border ${colorMap[color] || colorMap.indigo} text-xs font-semibold shadow-xl flex items-center gap-2 transform transition-all duration-300 translate-y-4 opacity-0`;
+      toast.innerHTML = `
+        <span class="w-2 h-2 rounded-full bg-current"></span>
+        <span>${escapeHtml(message)}</span>
+      `;
+
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove("translate-y-4", "opacity-0");
+      });
+
+      setTimeout(() => {
+        toast.classList.add("opacity-0", "translate-y-2");
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    /* Helpers & Utilities */
+    function formatBytes(bytes, decimals = 2) {
+      if (bytes === 0) return '0.00 B';
+      const k = 1024;
+      const dm = decimals < 0 ? 0 : decimals;
+      const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
+
+    function escapeHtml(string) {
+      if (!string) return '';
+      return String(string).replace(/[&<>"']/g, function (s) {
+        return {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+        }[s];
+      });
+    }
+
+    function getCategoryIconSVG(cat) {
+      switch(cat) {
+        case 'video':
+          return `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>`;
+        case 'image':
+          return `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`;
+        case 'audio':
+          return `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>`;
+        case 'pdf':
+          return `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>`;
+        default:
+          return `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>`;
+      }
+    }
+
+    // Keyboard Shortcuts (Esc to close viewer)
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeMediaViewer();
+        closeDeployGuideModal();
+      }
+    });
+
+    // App Initialization
+    window.onload = async function() {
+      try {
+        await initDatabase();
+        // Check if unlocked previously in session
+        if (sessionStorage.getItem("shaswat_vault_unlocked") === "true") {
+          unlockVaultInterface();
+        } else {
+          document.getElementById("passwordInput").focus();
+        }
+      } catch (err) {
+        console.error("Initialization error:", err);
+      }
+    };
+  </script>
+</body>
+</html>
